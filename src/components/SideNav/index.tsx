@@ -1,17 +1,11 @@
 "use client";
-
 import Link from "next/link";
-import { FC, useCallback } from "react";
+import { FC, useContext } from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { AccountContext } from "@/context/AccountProvider";
 
 const SideNav: FC = () => {
-  const router = useRouter();
-
-  const logoutHandler = useCallback(() => {
-    localStorage.removeItem("loginInfo");
-    router.replace("/");
-  }, [router]);
+  const { logoutHandler } = useContext(AccountContext);
 
   return (
     <nav className="pb-8  items-center h-[100svh]  flex flex-col min-w-36  bg-green-100">
