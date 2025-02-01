@@ -5,7 +5,7 @@ type InputProps = {
   placeholder?: string;
   type?: string;
   required?: boolean;
-  value?: string;
+  value?: string | number;
   onChange: ChangeEventHandler<HTMLInputElement>;
   name?: string;
 };
