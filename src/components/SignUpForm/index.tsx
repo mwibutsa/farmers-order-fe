@@ -11,16 +11,18 @@ import {
 } from "react";
 import Input from "../Input";
 import Button from "../Button";
-import { ILoginPayload, loginHandler } from "@/lib/farmers";
+import { ISignUpPayload, signUpHandler } from "@/lib/farmers";
 import { AccountContext, AuthTypes } from "@/context/AccountProvider";
 
-const LoginForm: FC = () => {
-  const [payload, setPayload] = useState<ILoginPayload>({
+const SignUpForm: FC = () => {
+  const [payload, setPayload] = useState<ISignUpPayload>({
     phoneNumber: "",
     password: "",
+    firstName: "",
+    lastName: "",
   });
 
-  const { clientLogin, switchAuth } = useContext(AccountContext);
+  const { switchAuth } = useContext(AccountContext);
 
   const valueChangeHandler = ({
     target: { value, name },
@@ -32,8 +34,8 @@ const LoginForm: FC = () => {
   };
 
   const disableSubmit = useMemo(() => {
-    return payload.password.trim() === "" || payload.phoneNumber.trim() === "";
-  }, [payload.password, payload.phoneNumber]);
+    return Object.values(payload).some((value: string) => value.trim() === "");
+  }, [payload]);
 
   const submitHandler = useCallback(
     async (e: FormEvent<HTMLFormElement>) => {
@@ -42,17 +44,36 @@ const LoginForm: FC = () => {
       if (disableSubmit) return;
 
       try {
-        const result = await loginHandler(payload);
-        clientLogin(result);
+        const result = await signUpHandler(payload);
+        console.log("result", result);
+        if (result) {
+          switchAuth(AuthTypes.LOGIN);
+        }
       } catch (error) {
         console.log(error);
       }
     },
-    [disableSubmit, payload, clientLogin]
+    [disableSubmit, payload, switchAuth]
   );
 
   return (
-    <form method="POST" onSubmit={submitHandler}>
+    <form onSubmit={submitHandler}>
+      <div className="flex gap-1">
+        <Input
+          value={payload.firstName}
+          placeholder="John"
+          label="First Name"
+          onChange={valueChangeHandler}
+          name="firstName"
+        />
+        <Input
+          value={payload.lastName}
+          placeholder="Doe"
+          label="Last Name"
+          onChange={valueChangeHandler}
+          name="lastName"
+        />
+      </div>
       <Input
         value={payload.phoneNumber}
         placeholder="Phone number"
@@ -69,16 +90,16 @@ const LoginForm: FC = () => {
         name="password"
       />
       <div className="flex items-center gap-2">
-        <Button type="submit">Login</Button>
+        <Button type="submit">Sign Up</Button>
         <span className="text-sm text-slate-700">
-          Not account yet ?{" "}
+          Already have an account ?{" "}
           <button
             onClick={() => {
-              switchAuth(AuthTypes.SIGN_UP);
+              switchAuth(AuthTypes.LOGIN);
             }}
             className="text-green-700 cursor-pointer hover:border-b hover:border-green-700 hover:font-semibold w-16 h-6 text-left"
           >
-            Sign Up
+            Login
           </button>
         </span>
       </div>
@@ -86,4 +107,4 @@ const LoginForm: FC = () => {
   );
 };
 
-export default LoginForm;
+export default SignUpForm;

@@ -1,16 +1,17 @@
 "use client";
 
 import LoginForm from "@/components/LoginForm";
-import { AccountContext } from "@/context/AccountProvider";
+import SignUpForm from "@/components/SignUpForm";
+import { AccountContext, AuthTypes } from "@/context/AccountProvider";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect } from "react";
 
 export default function Home() {
-  const { isLoggedIn } = useContext(AccountContext);
+  const { isLoggedIn, authType } = useContext(AccountContext);
   const router = useRouter();
   useEffect(() => {
     if (isLoggedIn) {
-      router.replace("/farmers-dashboard");
+      router.replace("/farmers/land");
     }
   }, [isLoggedIn, router]);
 
@@ -33,7 +34,7 @@ export default function Home() {
                 Connect with us for Cheap and Affordable Supplies.
               </h1>
             </div>
-            <LoginForm />
+            {authType === AuthTypes.LOGIN ? <LoginForm /> : <SignUpForm />}
           </div>
         </div>
       </main>

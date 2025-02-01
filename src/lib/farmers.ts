@@ -5,10 +5,24 @@ export interface ILoginPayload {
   phoneNumber: string;
   password: string;
 }
+
+export interface ISignUpPayload extends ILoginPayload {
+  firstName: string;
+  lastName: string;
+}
+
 export const loginHandler = async (payload: ILoginPayload) => {
   try {
-    console.log("backendApi.baseUrl");
     const { data } = await backendApi.post("/farmers/login", payload);
+    return data;
+  } catch (error) {
+    logger(error);
+  }
+};
+
+export const signUpHandler = async (payload: ISignUpPayload) => {
+  try {
+    const { data } = await backendApi.post("/farmers/sign-up", payload);
     return data;
   } catch (error) {
     logger(error);

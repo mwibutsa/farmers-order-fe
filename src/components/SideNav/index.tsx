@@ -1,10 +1,20 @@
+"use client";
+
 import Link from "next/link";
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 const SideNav: FC = () => {
+  const router = useRouter();
+
+  const logoutHandler = useCallback(() => {
+    localStorage.removeItem("loginInfo");
+    router.replace("/");
+  }, [router]);
+
   return (
-    <nav className="pb-8 pl-8 min-h-[100svh]  min-w-36  bg-green-100">
+    <nav className="pb-8  items-center h-[100svh]  flex flex-col min-w-36  bg-green-100">
       <Image
         src="/images/logo.png"
         alt="Logo"
@@ -23,6 +33,15 @@ const SideNav: FC = () => {
           <Link href="/farmers/account">Account</Link>
         </li>
       </ul>
+      <div className="flex flex-1 flex-col">
+        <div className="flex-1"></div>
+        <button
+          onClick={logoutHandler}
+          className="rounded-sm hover:bg-green-700 hover:text-white px-4 py-1 border-2 border-green-700 text-green-700 font-bold"
+        >
+          Logout
+        </button>
+      </div>
     </nav>
   );
 };
