@@ -8,11 +8,10 @@ import {
   SetStateAction,
   useCallback,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { getLocalStorageItem } from "@/lib/localStorage";
+import { isAuthenticated } from "@/lib/localStorage";
 
 export enum AuthTypes {
   LOGIN = "LOGIN",
@@ -46,19 +45,15 @@ type ContextProps = {
 const AccountProvider: FC<ContextProps> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [authType, setAuthType] = useState<AuthTypes>(AuthTypes.LOGIN);
-  const [firstLogin, setFirstLogin] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(false);
 
   const router = useRouter();
   const pathname = usePathname();
-  const redirectInProgress = useRef(false);
 
   const logoutHandler = useCallback(() => {
     localStorage.removeItem(LOGIN_KEY);
     setIsLoggedIn(false);
-    window.location.reload();
-    window.location.replace("/");
-  }, []);
+    router.replace("/");
+  }, [router]);
 
   const switchAuth = useCallback((auth: AuthTypes) => {
     setAuthType(auth);
@@ -75,52 +70,21 @@ const AccountProvider: FC<ContextProps> = ({ children }) => {
           ).getTime(),
         })
       );
-      setIsLoggedIn(true);
-      setFirstLogin(true);
       router.replace("/farmers/land");
     },
     [router]
   );
 
   // Initialize authentication state
-  useEffect(() => {
-    const loginInfo = getLocalStorageItem(LOGIN_KEY);
-    if (loginInfo) {
-      if (Date.now() >= loginInfo.expiresAt) {
-        setIsLoggedIn(false);
-        localStorage.removeItem(LOGIN_KEY);
-      } else {
-        setIsLoggedIn(true);
-      }
-    } else {
-      setIsLoggedIn(false);
-    }
-    setIsInitialized(true);
-  }, []);
 
   // Handle redirects
   useEffect(() => {
-    if (!isInitialized || redirectInProgress.current) {
-      return;
+    if (isAuthenticated() && pathname === "/") {
+      router.replace("/farmers/land");
+    } else if (!isAuthenticated() && pathname !== "/") {
+      router.replace("/");
     }
-
-    const handleRedirect = async () => {
-      redirectInProgress.current = true;
-
-      if (!isLoggedIn && pathname !== "/") {
-        router.replace("/");
-      } else if (isLoggedIn && pathname === "/") {
-        if (firstLogin) {
-          router.replace("/farmers/land");
-          setFirstLogin(false);
-        }
-      }
-
-      redirectInProgress.current = false;
-    };
-
-    handleRedirect();
-  }, [isLoggedIn, pathname, router, firstLogin, isInitialized]);
+  }, [pathname, router]);
 
   return (
     <AccountContext.Provider
@@ -133,7 +97,7 @@ const AccountProvider: FC<ContextProps> = ({ children }) => {
         logoutHandler,
       }}
     >
-      {isInitialized ? children : null}
+      {children}
     </AccountContext.Provider>
   );
 };
