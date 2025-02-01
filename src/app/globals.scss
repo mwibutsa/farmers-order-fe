@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@mixin overlay-background(
+  $start-color, 
+  $end-color, 
+  $image,
+  $direction: to bottom
+) {
+  background: linear-gradient(
+    $direction,
+    $start-color,
+    $end-color
+  ), url($image);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+:root {
+  --background: rgb(244, 249, 244);
+  --foreground: #171717;
+  --yellowGreen: #94c01b;
+    --accent: rgb(53, 151, 37);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground: #171717;
+      --background: #f4f9f4;
+  }
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.bg-img {
+  &__welcome {
+    @include overlay-background(rgba(53, 151, 37,0.5), rgba(53, 151, 37,0.5), "/images/home-bg.jpg",to bottom );
+  }
+}
