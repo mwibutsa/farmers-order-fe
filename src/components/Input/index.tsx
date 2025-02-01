@@ -21,7 +21,7 @@ const Input: FC<InputProps> = ({
     <div className="mb-5 flex-1">
       <label
         htmlFor="email"
-        className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        className="block mb-2 text-sm font-semibold text-gray-900 dark:text-white"
       >
         {label}
       </label>

@@ -18,6 +18,16 @@ export interface IAddLandPayload {
   landSize: number;
 }
 
+export interface IMakeOrderPayload {
+  landId: number;
+  seedId?: number;
+  fertilizerId?: number;
+}
+
+export interface IOrderDetails {
+  id: number;
+}
+
 export const loginHandler = async (payload: ILoginPayload) => {
   try {
     const { data } = await backendApi.post("/farmers/login", payload);
@@ -40,4 +50,10 @@ export const addLandInfoHandler = async (
   payload: IAddLandPayload
 ): Promise<ILand> => {
   return backendApi.post("/land/add-land-info", payload);
+};
+
+export const makeOrder = async (
+  payload: IMakeOrderPayload
+): Promise<IOrderDetails> => {
+  return backendApi.post("/orders", payload);
 };

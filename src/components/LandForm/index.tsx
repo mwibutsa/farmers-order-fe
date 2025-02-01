@@ -66,6 +66,7 @@ const LandForm: FC = () => {
       loadButton={isLoading}
       toggleLabel="Add more"
       onAccept={submitHandler}
+      title="Add new land information"
     >
       <form action="">
         {error && (

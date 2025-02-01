@@ -1,23 +1,33 @@
 import { AxiosError } from "axios";
 import { useState } from "react";
 
-interface ApiCallState<T> {
-  data: T | null;
+interface ApiCallState<TData> {
+  data: TData | null;
   error: Error | null;
   isLoading: boolean;
 }
 
-export const useApiCall = <T>() => {
-  const [state, setState] = useState<ApiCallState<T>>({
+type ApiCallResult<TData> =
+  | { success: true; data: TData }
+  | { success: false; error: Error };
+
+export const useApiCall = <TResponse, TData = TResponse>() => {
+  const [state, setState] = useState<ApiCallState<TData>>({
     data: null,
     error: null,
     isLoading: false,
   });
 
-  const execute = async (apiCall: () => Promise<T>) => {
+  const execute = async (
+    apiCall: () => Promise<TResponse>,
+    transform?: (response: TResponse) => TData
+  ): Promise<ApiCallResult<TData>> => {
     setState((prev) => ({ ...prev, isLoading: true, error: null }));
     try {
-      const result = await apiCall();
+      const response = await apiCall();
+      const result = transform
+        ? transform(response)
+        : (response as unknown as TData);
       setState({ data: result, error: null, isLoading: false });
       return { success: true, data: result };
     } catch (err) {
@@ -35,7 +45,6 @@ export const useApiCall = <T>() => {
     }
   };
 
-  // Return state properties directly along with execute
   return {
     isLoading: state.isLoading,
     error: state.error,
@@ -44,12 +53,12 @@ export const useApiCall = <T>() => {
   };
 };
 
-// Type for the return value of useApiCall
-export type UseApiCallReturn<T> = {
+export type UseApiCallReturn<TResponse, TData = TResponse> = {
   isLoading: boolean;
   error: Error | null;
-  data: T | null;
+  data: TData | null;
   execute: (
-    apiCall: () => Promise<T>
-  ) => Promise<{ success: true; data: T } | { success: false; error: Error }>;
+    apiCall: () => Promise<TResponse>,
+    transform?: (response: TResponse) => TData
+  ) => Promise<ApiCallResult<TData>>;
 };

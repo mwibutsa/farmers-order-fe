@@ -1,18 +1,18 @@
 import useSWR from "swr";
 import backendApi from "@/utils/backendApi";
 
-export interface ILand {
+export interface IFertilizer {
   id: number;
-  farmerId: number;
-  landSize: number;
-  location: string;
-  upi: string;
-  createdAt: Date;
-  updatedAt: Date;
+  name: string;
+  description: string;
+  pricePerKg: number;
+  kgPerAcre: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 interface PaginatedResponse {
-  data: ILand[];
+  data: IFertilizer[];
   meta: {
     currentPage: number;
     totalPages: number;
@@ -21,7 +21,7 @@ interface PaginatedResponse {
   };
 }
 
-interface UseLandProps {
+interface UseFertilizerProps {
   page?: number;
   limit?: number;
 }
@@ -31,19 +31,19 @@ const fetcher = async (url: string) => {
   return data;
 };
 
-const useLand = ({ page = 1, limit = 5 }: UseLandProps = {}) => {
+const useFertilizer = ({ page = 1, limit = 5 }: UseFertilizerProps = {}) => {
   const {
     data: response,
     error,
     isLoading,
     mutate,
   } = useSWR<PaginatedResponse>(
-    `/land/farmers-land?page=${page}&limit=${limit}`,
+    `/fertilizers?page=${page}&limit=${limit}`,
     fetcher
   );
 
   return {
-    lands: response?.data ?? [],
+    fertilizers: response?.data ?? [],
     meta: response?.meta,
     isLoading,
     error,
@@ -51,4 +51,4 @@ const useLand = ({ page = 1, limit = 5 }: UseLandProps = {}) => {
   };
 };
 
-export default useLand;
+export default useFertilizer;

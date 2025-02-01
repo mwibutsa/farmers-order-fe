@@ -12,7 +12,7 @@ interface ModalProps {
 }
 
 const Modal = ({
-  title = "Terms of Service",
+  title = "",
   onAccept = () => {},
   onDecline = () => {},
   children,
@@ -39,7 +39,7 @@ const Modal = ({
         className={`${
           isOpen ? "" : "hidden"
         } overflow-y-auto bg-black bg-opacity-55 overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full ${
-          disableButton || loadButton ? "pointer-events-none" : ""
+          loadButton ? "pointer-events-none" : ""
         }`}
         tabIndex={-1}
         aria-hidden={!isOpen}
@@ -99,7 +99,7 @@ const Modal = ({
                 disabled={loadButton}
                 type="button"
                 className={`${
-                  disableButton || loadButton ? "pointer-events-none" : ""
+                  loadButton ? "pointer-events-none" : ""
                 } py-2.5 px-5 ms-3 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700`}
                 onClick={() => {
                   onDecline();

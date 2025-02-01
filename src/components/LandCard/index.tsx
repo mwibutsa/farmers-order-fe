@@ -1,6 +1,6 @@
 import { FC } from "react";
-import Button from "../Button";
 import { ILand } from "@/hooks/userLand";
+import OrdersForm from "../OrdersForm";
 
 const LandCard: FC<{ land: ILand }> = ({ land }) => {
   return (
@@ -26,9 +26,7 @@ const LandCard: FC<{ land: ILand }> = ({ land }) => {
       </ul>
 
       <div className="flex gap-1 mt-4">
-        <Button>Edit</Button>
-        <Button>Delete</Button>
-        <Button>Order</Button>
+        <OrdersForm selectedLand={land.id} />
       </div>
     </div>
   );
