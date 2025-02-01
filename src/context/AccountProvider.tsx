@@ -77,9 +77,9 @@ const AccountProvider: FC<ContextProps> = ({ children }) => {
       );
       setIsLoggedIn(true);
       setFirstLogin(true);
-      window.location.reload();
+      router.replace("/farmers/land");
     },
-    []
+    [router]
   );
 
   // Initialize authentication state
@@ -113,8 +113,6 @@ const AccountProvider: FC<ContextProps> = ({ children }) => {
         if (firstLogin) {
           router.replace("/farmers/land");
           setFirstLogin(false);
-        } else {
-          router.replace(pathname);
         }
       }
 
