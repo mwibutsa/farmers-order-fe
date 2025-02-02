@@ -1,18 +1,18 @@
 import { AxiosError } from "axios";
 import { useState } from "react";
 
-interface ApiCallState<TData> {
-  data: TData | null;
+interface ApiCallState<TResponse> {
+  data: TResponse | null;
   error: Error | null;
   isLoading: boolean;
 }
 
-type ApiCallResult<TData> =
-  | { success: true; data: TData }
+type ApiCallResult<TResponse> =
+  | { success: true; data: TResponse; result?: unknown }
   | { success: false; error: Error };
 
 export const useApiCall = <TResponse, TData = TResponse>() => {
-  const [state, setState] = useState<ApiCallState<TData>>({
+  const [state, setState] = useState<ApiCallState<TResponse>>({
     data: null,
     error: null,
     isLoading: false,
@@ -21,15 +21,13 @@ export const useApiCall = <TResponse, TData = TResponse>() => {
   const execute = async (
     apiCall: () => Promise<TResponse>,
     transform?: (response: TResponse) => TData
-  ): Promise<ApiCallResult<TData>> => {
+  ): Promise<ApiCallResult<TResponse>> => {
     setState((prev) => ({ ...prev, isLoading: true, error: null }));
     try {
       const response = await apiCall();
-      const result = transform
-        ? transform(response)
-        : (response as unknown as TData);
-      setState({ data: result, error: null, isLoading: false });
-      return { success: true, data: result };
+      const result = transform ? transform(response) : response;
+      setState({ data: response, error: null, isLoading: false });
+      return { success: true, data: response, result };
     } catch (err) {
       let error;
       const axiosErr = err as AxiosError;
@@ -56,9 +54,9 @@ export const useApiCall = <TResponse, TData = TResponse>() => {
 export type UseApiCallReturn<TResponse, TData = TResponse> = {
   isLoading: boolean;
   error: Error | null;
-  data: TData | null;
+  data: TResponse | null;
   execute: (
     apiCall: () => Promise<TResponse>,
     transform?: (response: TResponse) => TData
-  ) => Promise<ApiCallResult<TData>>;
+  ) => Promise<ApiCallResult<TResponse>>;
 };

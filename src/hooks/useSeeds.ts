@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import backendApi from "@/utils/backendApi";
+import { PaginatedResponse } from "@/interfaces";
 
 export interface ISeed {
   id: number;
@@ -9,16 +10,6 @@ export interface ISeed {
   kgPerAcre: number;
   createdAt?: Date;
   updatedAt?: Date;
-}
-
-interface PaginatedResponse {
-  data: ISeed[];
-  meta: {
-    currentPage: number;
-    totalPages: number;
-    totalItems: number;
-    itemsPerPage: number;
-  };
 }
 
 interface UseSeedProps {
@@ -37,11 +28,14 @@ const useSeed = ({ page = 1, limit = 5 }: UseSeedProps = {}) => {
     error,
     isLoading,
     mutate,
-  } = useSWR<PaginatedResponse>(`/seeds?page=${page}&limit=${limit}`, fetcher);
+  } = useSWR<PaginatedResponse<ISeed>>(
+    `/seeds?page=${page}&limit=${limit}`,
+    fetcher
+  );
 
   return {
-    seeds: response?.data ?? [],
-    meta: response?.meta,
+    seeds: response?.data?.data ?? [],
+    meta: response?.data?.pagination,
     isLoading,
     error,
     mutate,

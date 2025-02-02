@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import backendApi from "@/utils/backendApi";
+import { PaginatedResponse } from "@/interfaces";
 
 export interface IFertilizer {
   id: number;
@@ -9,16 +10,6 @@ export interface IFertilizer {
   kgPerAcre: number;
   createdAt?: Date;
   updatedAt?: Date;
-}
-
-interface PaginatedResponse {
-  data: IFertilizer[];
-  meta: {
-    currentPage: number;
-    totalPages: number;
-    totalItems: number;
-    itemsPerPage: number;
-  };
 }
 
 interface UseFertilizerProps {
@@ -37,14 +28,14 @@ const useFertilizer = ({ page = 1, limit = 5 }: UseFertilizerProps = {}) => {
     error,
     isLoading,
     mutate,
-  } = useSWR<PaginatedResponse>(
+  } = useSWR<PaginatedResponse<IFertilizer>>(
     `/fertilizers?page=${page}&limit=${limit}`,
     fetcher
   );
 
   return {
-    fertilizers: response?.data ?? [],
-    meta: response?.meta,
+    fertilizers: response?.data?.data ?? [],
+    pagination: response?.data?.pagination,
     isLoading,
     error,
     mutate,

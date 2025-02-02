@@ -15,6 +15,7 @@ const LandPage: FC = () => {
   });
 
   const { isLoading, lands } = useLand(pagination);
+  console.log("lands", lands);
 
   return (
     <FarmerPageWrapper title="Land Management">

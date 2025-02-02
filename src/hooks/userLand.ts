@@ -1,5 +1,6 @@
 import useSWR from "swr";
 import backendApi from "@/utils/backendApi";
+import { PaginatedResponse } from "@/interfaces";
 
 export interface ILand {
   id: number;
@@ -9,16 +10,6 @@ export interface ILand {
   upi: string;
   createdAt: Date;
   updatedAt: Date;
-}
-
-interface PaginatedResponse {
-  data: ILand[];
-  meta: {
-    currentPage: number;
-    totalPages: number;
-    totalItems: number;
-    itemsPerPage: number;
-  };
 }
 
 interface UseLandProps {
@@ -37,14 +28,14 @@ const useLand = ({ page = 1, limit = 5 }: UseLandProps = {}) => {
     error,
     isLoading,
     mutate,
-  } = useSWR<PaginatedResponse>(
+  } = useSWR<PaginatedResponse<ILand>>(
     `/land/farmers-land?page=${page}&limit=${limit}`,
     fetcher
   );
 
   return {
-    lands: response?.data ?? [],
-    meta: response?.meta,
+    lands: response?.data?.data ?? [],
+    pagination: response?.data?.pagination,
     isLoading,
     error,
     mutate,

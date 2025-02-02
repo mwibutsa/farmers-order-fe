@@ -11,10 +11,15 @@ import {
 } from "react";
 import Input from "../Input";
 import Button from "../Button";
-import { ILoginPayload, loginHandler } from "@/lib/farmers";
+import { ILoginPayload, ILoginResponse, loginHandler } from "@/lib/farmers";
 import { AccountContext, AuthTypes } from "@/context/AccountProvider";
+import { useApiCall } from "@/hooks/useApiCall";
 
 const LoginForm: FC = () => {
+  const { execute, isLoading, data } = useApiCall<
+    ILoginResponse,
+    ILoginPayload
+  >();
   const [payload, setPayload] = useState<ILoginPayload>({
     phoneNumber: "",
     password: "",
@@ -40,15 +45,13 @@ const LoginForm: FC = () => {
       e.preventDefault();
 
       if (disableSubmit) return;
+      const { success } = await execute(() => loginHandler(payload));
 
-      try {
-        const result = await loginHandler(payload);
-        clientLogin(result);
-      } catch (error) {
-        console.log(error);
+      if (success && data) {
+        clientLogin(data.data);
       }
     },
-    [disableSubmit, payload, clientLogin]
+    [disableSubmit, payload, clientLogin, execute, data]
   );
 
   return (
@@ -69,7 +72,12 @@ const LoginForm: FC = () => {
         name="password"
       />
       <div className="flex items-center gap-2">
-        <Button type="submit">Login</Button>
+        <Button
+          type="submit"
+          className={`${isLoading ? "pointer-events-none bg-green-200" : ""}`}
+        >
+          Login
+        </Button>
         <span className="text-sm text-slate-700">
           Not account yet ?{" "}
           <button

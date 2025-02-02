@@ -6,6 +6,13 @@ export interface ILoginPayload {
   phoneNumber: string;
   password: string;
 }
+export interface ILoginResponse {
+  data: {
+    accessToken: string;
+    expiresIn: number;
+  };
+  status: number;
+}
 
 export interface ISignUpPayload extends ILoginPayload {
   firstName: string;
@@ -28,13 +35,11 @@ export interface IOrderDetails {
   id: number;
 }
 
-export const loginHandler = async (payload: ILoginPayload) => {
-  try {
-    const { data } = await backendApi.post("/farmers/login", payload);
-    return data;
-  } catch (error) {
-    logger(error);
-  }
+export const loginHandler = async (
+  payload: ILoginPayload
+): Promise<ILoginResponse> => {
+  const { data } = await backendApi.post("/farmers/login", payload);
+  return data;
 };
 
 export const signUpHandler = async (payload: ISignUpPayload) => {
