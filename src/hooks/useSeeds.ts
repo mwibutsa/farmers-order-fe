@@ -10,6 +10,15 @@ export interface ISeed {
   kgPerAcre: number;
   createdAt?: Date;
   updatedAt?: Date;
+  fertilizers?: {
+    id: number;
+    name: string;
+    description: string;
+    pricePerKg: number;
+    kgPerAcre: number;
+    createdAt?: Date;
+    updatedAt?: Date;
+  }[];
 }
 
 interface UseSeedProps {
@@ -29,7 +38,7 @@ const useSeed = ({ page = 1, limit = 5 }: UseSeedProps = {}) => {
     isLoading,
     mutate,
   } = useSWR<PaginatedResponse<ISeed>>(
-    `/seeds?page=${page}&limit=${limit}`,
+    `/seeds/with-fertilizers?page=${page}&limit=${limit}`,
     fetcher
   );
 
