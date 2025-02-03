@@ -4,7 +4,7 @@ import OrdersForm from "../OrdersForm";
 
 const LandCard: FC<{ land: ILand }> = ({ land }) => {
   return (
-    <div className="flex flex-col border border-green-700 w-64 p-4 rounded">
+    <div className="flex flex-col border border-gray-300 w-64 p-4 rounded bg-white">
       <ul>
         <li>
           <span className="font-semibold mr-2">UPI: </span>

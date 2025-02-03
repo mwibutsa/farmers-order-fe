@@ -34,8 +34,8 @@ const useLand = ({ page = 1, limit = 5 }: UseLandProps = {}) => {
   );
 
   return {
-    lands: response?.data?.data ?? [],
-    pagination: response?.data?.pagination,
+    lands: response?.data ?? [],
+    pagination: response?.pagination,
     isLoading,
     error,
     mutate,

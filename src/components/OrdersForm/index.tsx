@@ -21,14 +21,15 @@ const OrdersForm: FC<OrderFormProps> = ({ selectedLand }) => {
     fertilizerId: fertilizers[0]?.id,
   });
 
-  const changeHandler = ({
-    target: { name, value },
-  }: ChangeEvent<HTMLSelectElement>) => {
-    setPayload((prev) => ({
-      ...prev,
-      [name]: +value,
-    }));
-  };
+  const changeHandler = useCallback(
+    ({ target: { name, value } }: ChangeEvent<HTMLSelectElement>) => {
+      setPayload((prev) => ({
+        ...prev,
+        [name]: +value,
+      }));
+    },
+    []
+  );
 
   const landOptions = useMemo(() => {
     if (lands.length) {
@@ -52,13 +53,10 @@ const OrdersForm: FC<OrderFormProps> = ({ selectedLand }) => {
   }, [seeds]);
 
   const fertilizerOptions = useMemo(() => {
-    if (fertilizers.length) {
-      return fertilizers.map((fertilizer) => ({
-        id: fertilizer.id,
-        name: fertilizer.name,
-      }));
-    }
-    return [];
+    return fertilizers.map((fertilizer) => ({
+      id: fertilizer.id,
+      name: fertilizer.name,
+    }));
   }, [fertilizers]);
 
   const { execute, isLoading } = useApiCall<IOrderDetails, IMakeOrderPayload>();

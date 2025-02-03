@@ -34,8 +34,8 @@ const useFertilizer = ({ page = 1, limit = 5 }: UseFertilizerProps = {}) => {
   );
 
   return {
-    fertilizers: response?.data?.data ?? [],
-    pagination: response?.data?.pagination,
+    fertilizers: response?.data ?? [],
+    pagination: response?.pagination,
     isLoading,
     error,
     mutate,

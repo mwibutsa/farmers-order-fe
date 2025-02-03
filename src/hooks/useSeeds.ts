@@ -34,8 +34,8 @@ const useSeed = ({ page = 1, limit = 5 }: UseSeedProps = {}) => {
   );
 
   return {
-    seeds: response?.data?.data ?? [],
-    meta: response?.data?.pagination,
+    seeds: response?.data ?? [],
+    meta: response?.pagination,
     isLoading,
     error,
     mutate,
