@@ -3,19 +3,34 @@
 import FarmerPageWrapper from "@/components/HOC/FarmerPageWrapper";
 import LandCard from "@/components/LandCard";
 import LandForm from "@/components/LandForm";
+import Pagination from "@/components/Pagination";
 import Spinner from "@/components/Spinner";
 import useLand from "@/hooks/userLand";
 
 import { FC, useState } from "react";
 
 const LandPage: FC = () => {
-  const [pagination] = useState<{ page: number; limit: number }>({
+  const [pages, setPages] = useState<{ page: number; limit: number }>({
     page: 1,
     limit: 5,
   });
 
-  const { isLoading, lands } = useLand(pagination);
-  console.log("lands", lands);
+  const { isLoading, lands, pagination } = useLand(pages);
+
+  const handleNext = () => {
+    setPages((prev) => ({
+      ...prev,
+      page:
+        (pagination?.totalPages || 1) > prev.page ? prev.page + 1 : prev.page,
+    }));
+  };
+
+  const handlePrev = () => {
+    setPages((prev) => ({
+      ...prev,
+      page: prev.page > 1 ? prev.page - 1 : prev.page,
+    }));
+  };
 
   return (
     <FarmerPageWrapper title="Land Management">
@@ -44,6 +59,20 @@ const LandPage: FC = () => {
           ))}
         </div>
       ) : null}
+      <div className="py-5">
+        <Pagination
+          activePage={pages.page}
+          totalPages={pagination?.totalPages || 1}
+          onPageChange={(page: number) => {
+            setPages((prev) => ({
+              ...prev,
+              page,
+            }));
+          }}
+          handleNext={handleNext}
+          handlePrev={handlePrev}
+        />
+      </div>
     </FarmerPageWrapper>
   );
 };
