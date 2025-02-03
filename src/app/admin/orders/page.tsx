@@ -8,6 +8,7 @@ import usePagination from "@/hooks/usePagination";
 import OrderDetails from "@/components/OrderDetails";
 import usePendingOrders from "@/hooks/usePendingOrders";
 
+
 const FarmersDashboard: FC = () => {
   const { pagination, setPage, handleNext, handlePrev } = usePagination(1, 5);
 
@@ -28,7 +29,7 @@ const FarmersDashboard: FC = () => {
 
   const renderOrders = useMemo(() => {
     return orders.map((order: IOrder) => (
-      <OrderDetails order={order} key={order.id} />
+      <OrderDetails order={order} key={order.id} isAdmin />
     ));
   }, [orders]);
 
@@ -57,6 +58,12 @@ const FarmersDashboard: FC = () => {
             ) : null}
           </>
         )}
+        {!orders?.length ? (
+          <div className="text-center pt-6">
+            <p>Grab your cup of coffee and lean back for a moment</p>
+            <p>Farmers have no requests for now.</p>
+          </div>
+        ) : null}
         <Pagination
           activePage={pagination.page}
           totalPages={orderPagination?.totalPages || 1}

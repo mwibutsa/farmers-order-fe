@@ -9,6 +9,7 @@ interface ModalProps {
   toggleLabel: string;
   disableButton?: boolean;
   loadButton?: boolean;
+  triggerClasses?: string;
 }
 
 const Modal = ({
@@ -19,6 +20,7 @@ const Modal = ({
   toggleLabel,
   disableButton,
   loadButton,
+  triggerClasses = "py-2",
 }: ModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -29,7 +31,7 @@ const Modal = ({
     <>
       <button
         onClick={handleOpen}
-        className="block border border-green-700 text-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none hover:text-white  focus:ring-green-300 font-bold rounded-md text-sm px-2 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+        className={`block border  border-green-700 text-green-700 hover:bg-green-800 focus:ring-1 focus:outline-none hover:text-white  focus:ring-green-300 font-bold rounded-md text-sm px-2  text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 ${triggerClasses}`}
         type="button"
       >
         {toggleLabel}

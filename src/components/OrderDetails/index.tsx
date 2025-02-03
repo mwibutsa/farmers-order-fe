@@ -1,12 +1,35 @@
 import { IOrder, OrderDetail } from "@/interfaces/responses";
-import { FC } from "react";
+import { FC, useMemo } from "react";
+import RejectOrder from "../admin/RejectOrder";
+import ApproveOrder from "../admin/ApproveOrder";
 
 const STATUS_CLASS = {
   PENDING: "bg-gray-50 border-gray-200 text-gray-700",
   REJECTED: "text-red-500 border-red-500 bg-red-100",
   APPROVED: "text-green-500 border-green-500 bg-green-100",
 };
-const OrderDetails: FC<{ order: IOrder }> = ({ order }) => {
+const OrderDetails: FC<{ order: IOrder; isAdmin?: boolean }> = ({
+  order,
+  isAdmin,
+}) => {
+  const orderSummary = useMemo(() => {
+    const seedsTotal = order.orderDetails.reduce(
+      (acc, detail) => (detail.seed ? acc + detail.quantity : acc),
+      0
+    );
+    const fertilizersTotal = order.orderDetails.reduce(
+      (acc, detail) => (detail.fertilizer ? acc + detail.quantity : acc),
+      0
+    );
+
+    const parts = [];
+    if (seedsTotal) parts.push(`${seedsTotal}kg of seeds`);
+    if (fertilizersTotal) parts.push(`${fertilizersTotal}kg of fertilizers`);
+
+    return parts.length
+      ? `The farmer has requested ${parts.join(" and ")}.`
+      : "";
+  }, [order.orderDetails]);
   return (
     <ul
       key={order.id}
@@ -37,13 +60,23 @@ const OrderDetails: FC<{ order: IOrder }> = ({ order }) => {
           </ul>
         );
       })}
-      <li
-        className={`${
-          STATUS_CLASS[order.status]
-        } border inline-block px-2 rounded-sm mt-4 text-sm font-semibold py-1`}
-      >
-        {order.status}
-      </li>
+      {!isAdmin && (
+        <li
+          className={`${
+            STATUS_CLASS[order.status]
+          } border inline-block px-2 rounded-sm mt-4 text-sm font-semibold py-1`}
+        >
+          {order.status}
+        </li>
+      )}
+      {isAdmin && (
+        <>
+          <div className="flex justify-between mt-4">
+            <ApproveOrder orderId={order.id}>{orderSummary}</ApproveOrder>
+            <RejectOrder orderId={order.id}>{orderSummary}</RejectOrder>
+          </div>
+        </>
+      )}
     </ul>
   );
 };
