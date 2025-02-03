@@ -4,8 +4,9 @@ import { ChangeEvent, FC, useCallback, useMemo, useState, memo } from "react";
 import Input from "../Input";
 import Modal from "../Modal";
 import { addLandInfoHandler } from "@/lib/farmers";
-import useLand, { ILand } from "@/hooks/userLand";
+import useLand from "@/hooks/userLand";
 import { useApiCall } from "@/hooks/useApiCall";
+import { ILand } from "@/interfaces/responses";
 interface LandPayload {
   upi: string;
   location?: string;
@@ -60,6 +61,46 @@ const LandForm: FC = () => {
     [disableSubmit, payload, mutate, execute]
   );
 
+  const MemoizedInputUpi = useMemo(
+    () => (
+      <Input
+        name="upi"
+        value={payload.upi}
+        label="UPI"
+        placeholder="UPI"
+        onChange={onChange}
+      />
+    ),
+    [payload.upi, onChange]
+  );
+
+  const MemoizedInputLandSize = useMemo(
+    () => (
+      <Input
+        name="landSize"
+        label="Land size in Acres"
+        placeholder="0.5"
+        onChange={onChange}
+        value={payload.landSize}
+        type="number"
+      />
+    ),
+    [payload.landSize, onChange]
+  );
+
+  const MemoizedInputLocation = useMemo(
+    () => (
+      <Input
+        name="location"
+        label="Location (optional)"
+        placeholder="Kigali, Rwanda"
+        onChange={onChange}
+        value={payload.location}
+      />
+    ),
+    [payload.location, onChange]
+  );
+
   return (
     <Modal
       disableButton={disableSubmit}
@@ -74,28 +115,9 @@ const LandForm: FC = () => {
             {error.message}
           </div>
         )}
-        <Input
-          name="upi"
-          value={payload.upi}
-          label="UPI"
-          placeholder="UPI"
-          onChange={onChange}
-        />
-        <Input
-          name="landSize"
-          label="Land size in Acres"
-          placeholder="0.5"
-          onChange={onChange}
-          value={payload.landSize}
-          type="number"
-        />
-        <Input
-          name="location"
-          label="Location (optional)"
-          placeholder="Kigali, Rwanda"
-          onChange={onChange}
-          value={payload.location}
-        />
+        {MemoizedInputUpi}
+        {MemoizedInputLandSize}
+        {MemoizedInputLocation}
       </form>
     </Modal>
   );

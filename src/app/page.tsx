@@ -38,16 +38,6 @@ export default function Home() {
           </div>
         </div>
       </main>
-      {/* <footer className="row-start-3 bg-green-600 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://mwibutsa.info"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Copyright &copy; Mwibutsa Floribert 2025
-        </a>
-      </footer> */}
     </div>
   );
 }

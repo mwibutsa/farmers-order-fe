@@ -1,16 +1,8 @@
 import useSWR from "swr";
 import backendApi from "@/utils/backendApi";
 import { PaginatedResponse } from "@/interfaces";
+import { ILand } from "@/interfaces/responses";
 
-export interface ILand {
-  id: number;
-  farmerId: number;
-  landSize: number;
-  location: string;
-  upi: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
 
 interface UseLandProps {
   page?: number;

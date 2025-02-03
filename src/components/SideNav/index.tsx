@@ -1,14 +1,14 @@
 "use client";
 import Link from "next/link";
-import { FC, useContext } from "react";
+import { FC, useContext, useMemo } from "react";
 import Image from "next/image";
 import { AccountContext } from "@/context/AccountProvider";
 
 const SideNav: FC = () => {
   const { logoutHandler } = useContext(AccountContext);
 
-  return (
-    <nav className="pb-8  items-center h-[100svh]  flex flex-col min-w-36  bg-green-100">
+  const memoizedImage = useMemo(
+    () => (
       <Image
         src="/images/logo.png"
         alt="Logo"
@@ -16,6 +16,13 @@ const SideNav: FC = () => {
         height={100}
         className="object-contain w-24 h-24"
       />
+    ),
+    []
+  );
+
+  return (
+    <nav className="pb-8  items-center h-[100svh]  flex flex-col min-w-36  bg-green-100">
+      {memoizedImage}
       <ul className="flex flex-col gap-4 mt-12">
         <li>
           <Link href="/farmers/land">Land</Link>

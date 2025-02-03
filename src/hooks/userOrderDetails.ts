@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import backendApi from "@/utils/backendApi";
-import { IOrderDetails } from "../lib/farmers";
 import { PaginatedResponse } from "@/interfaces";
+import { IOrder } from "@/interfaces/responses";
 
 interface UseOrderDerDetailsProps {
   page?: number;
@@ -22,13 +22,13 @@ const useOrderDetails = ({
     error,
     isLoading,
     mutate,
-  } = useSWR<PaginatedResponse<IOrderDetails>>(
-    `/orders/farmer-orders?page=${page}&limit=${limit}`,
+  } = useSWR<PaginatedResponse<IOrder>>(
+    `/orders/my-orders?page=${page}&limit=${limit}`,
     fetcher
   );
 
   return {
-    lands: response?.data ?? [],
+    orders: response?.data ?? [],
     pagination: response?.pagination,
     isLoading,
     error,

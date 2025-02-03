@@ -9,10 +9,12 @@ import {
 import Modal from "../Modal";
 import useLand from "@/hooks/userLand";
 import SelectInput from "../SelectInput";
-import useSeed, { ISeed } from "@/hooks/useSeeds";
+import useSeed from "@/hooks/useSeeds";
 import { useApiCall } from "@/hooks/useApiCall";
-import { IMakeOrderPayload, IOrderDetails, makeOrder } from "@/lib/farmers";
 import React from "react";
+import { IOrder, ISeed } from "@/interfaces/responses";
+import { IMakeOrderPayload } from "@/interfaces/payload";
+import { makeOrder } from "@/lib/farmers";
 
 type OrderFormProps = {
   selectedLand?: number;
@@ -78,7 +80,47 @@ const OrdersForm: FC<OrderFormProps> = ({ selectedLand }) => {
       : [];
   }, [selectedSeed?.fertilizers]);
 
-  const { execute, isLoading } = useApiCall<IOrderDetails, IMakeOrderPayload>();
+  const memoizedLandInput = useMemo(
+    () => (
+      <SelectInput
+        onChange={changeHandler}
+        options={landOptions}
+        label="Land"
+        name="landId"
+        value={payload.landId}
+        disabled
+      />
+    ),
+    [changeHandler, landOptions, payload.landId]
+  );
+
+  const memoizedSeedInput = useMemo(
+    () => (
+      <SelectInput
+        onChange={changeHandler}
+        options={seedOptions}
+        label="Seed"
+        name="seedId"
+        value={payload.seedId}
+      />
+    ),
+    [changeHandler, seedOptions, payload.seedId]
+  );
+
+  const memoizedFertilizerInput = useMemo(
+    () => (
+      <SelectInput
+        onChange={changeHandler}
+        options={fertilizerOptions}
+        label="Fertilizer"
+        name="fertilizerId"
+        value={payload.fertilizerId}
+      />
+    ),
+    [changeHandler, fertilizerOptions, payload.fertilizerId]
+  );
+
+  const { execute, isLoading } = useApiCall<IOrder, IMakeOrderPayload>();
 
   const disableSubmit = useMemo(() => {
     return !payload.landId || (!payload.fertilizerId && !payload.seedId);
@@ -96,6 +138,7 @@ const OrdersForm: FC<OrderFormProps> = ({ selectedLand }) => {
     },
     [payload, disableSubmit, execute]
   );
+
   return (
     <Modal
       onAccept={submitHandler}
@@ -106,35 +149,12 @@ const OrdersForm: FC<OrderFormProps> = ({ selectedLand }) => {
     >
       <form action="">
         {/* Land */}
-        {!loadingLands && (
-          <SelectInput
-            onChange={changeHandler}
-            options={landOptions}
-            label="Land"
-            name="landId"
-            value={payload.landId}
-            disabled
-          />
-        )}
+        {!loadingLands && memoizedLandInput}
         {/* Seeds */}
-        {!loadingSeeds && (
-          <SelectInput
-            onChange={changeHandler}
-            options={seedOptions}
-            label="Seed"
-            name="seedId"
-            value={payload.seedId}
-          />
-        )}
+        {!loadingSeeds && memoizedSeedInput}
         {/* Fertilizer */}
         {selectedSeed?.fertilizers?.length && !loadingSeeds ? (
-          <SelectInput
-            onChange={changeHandler}
-            options={fertilizerOptions}
-            label="Fertilizer"
-            name="fertilizerId"
-            value={payload.fertilizerId}
-          />
+          memoizedFertilizerInput
         ) : !selectedSeed?.fertilizers?.length && !loadingSeeds ? (
           <>
             {selectedSeed ? (

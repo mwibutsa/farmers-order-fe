@@ -106,8 +106,13 @@ const AccountProvider: FC<ContextProps> = ({ children }) => {
     ]
   );
 
-  return (
-    <AccountContext.Provider value={value}>{children}</AccountContext.Provider>
+  return useMemo(
+    () => (
+      <AccountContext.Provider value={value}>
+        {children}
+      </AccountContext.Provider>
+    ),
+    [value, children]
   );
 };
 

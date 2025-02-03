@@ -1,16 +1,8 @@
 import useSWR from "swr";
 import backendApi from "@/utils/backendApi";
 import { PaginatedResponse } from "@/interfaces";
+import { IFertilizer } from "@/interfaces/responses";
 
-export interface IFertilizer {
-  id: number;
-  name: string;
-  description: string;
-  pricePerKg: number;
-  kgPerAcre: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
 
 interface UseFertilizerProps {
   page?: number;

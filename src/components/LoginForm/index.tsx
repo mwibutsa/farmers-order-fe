@@ -27,14 +27,15 @@ const LoginForm: FC = () => {
 
   const { clientLogin, switchAuth } = useContext(AccountContext);
 
-  const valueChangeHandler = ({
-    target: { value, name },
-  }: ChangeEvent<HTMLInputElement>) => {
-    setPayload((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const valueChangeHandler = useCallback(
+    ({ target: { value, name } }: ChangeEvent<HTMLInputElement>) => {
+      setPayload((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    },
+    []
+  );
 
   const disableSubmit = useMemo(() => {
     return payload.password.trim() === "" || payload.phoneNumber.trim() === "";
@@ -53,6 +54,10 @@ const LoginForm: FC = () => {
     },
     [disableSubmit, payload, clientLogin, execute, data]
   );
+
+  const handleSignUpClick = useCallback(() => {
+    switchAuth(AuthTypes.SIGN_UP);
+  }, [switchAuth]);
 
   return (
     <form method="POST" onSubmit={submitHandler}>
@@ -79,11 +84,9 @@ const LoginForm: FC = () => {
           Login
         </Button>
         <span className="text-sm text-slate-700">
-          Not account yet ?{" "}
+          Not account yet?{" "}
           <button
-            onClick={() => {
-              switchAuth(AuthTypes.SIGN_UP);
-            }}
+            onClick={handleSignUpClick}
             className="text-green-700 cursor-pointer hover:border-b hover:border-green-700 hover:font-semibold w-16 h-6 text-left"
           >
             Sign Up

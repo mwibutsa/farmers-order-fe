@@ -1,25 +1,8 @@
 import useSWR from "swr";
 import backendApi from "@/utils/backendApi";
 import { PaginatedResponse } from "@/interfaces";
+import { ISeed } from "@/interfaces/responses";
 
-export interface ISeed {
-  id: number;
-  name: string;
-  description: string;
-  pricePerKg: number;
-  kgPerAcre: number;
-  createdAt?: Date;
-  updatedAt?: Date;
-  fertilizers?: {
-    id: number;
-    name: string;
-    description: string;
-    pricePerKg: number;
-    kgPerAcre: number;
-    createdAt?: Date;
-    updatedAt?: Date;
-  }[];
-}
 
 interface UseSeedProps {
   page?: number;

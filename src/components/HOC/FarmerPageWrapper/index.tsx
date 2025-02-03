@@ -10,7 +10,7 @@ const FarmerPageWrapper: FC<{ children?: ReactNode; title?: string }> = ({
       <div className="bg-gray-100 w-full p-8">
         {title && <PageTitle>{title}</PageTitle>}
       </div>
-      <div className="pl-8">{children}</div>
+      <div className="pl-8 pt-2">{children}</div>
     </main>
   );
 };
