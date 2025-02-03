@@ -1,7 +1,7 @@
 "use client";
 import FarmerPageWrapper from "@/components/HOC/FarmerPageWrapper";
 import useOrderDetails from "@/hooks/userOrderDetails";
-import { FC } from "react";
+import { FC, memo, useCallback, useMemo } from "react";
 import Spinner from "@/components/Spinner";
 import { IOrder } from "@/interfaces/responses";
 import Pagination from "@/components/Pagination";
@@ -18,33 +18,68 @@ const FarmersDashboard: FC = () => {
     pagination: orderPagination,
   } = useOrderDetails(pagination);
 
-  return (
-    <FarmerPageWrapper title="Order Management">
-      {isLoading ? (
-        <div>
-          <Spinner />
-        </div>
-      ) : (
-        <>
-          {error && <div>{error}</div>}
-          {orders.length ? (
-            <div className="flex gap-4 flex-wrap">
-              {orders.map((order: IOrder) => {
-                return <OrderDetails order={order} key={order.id} />;
-              })}
-            </div>
-          ) : null}
-        </>
-      )}
-      <Pagination
-        activePage={pagination.page}
-        totalPages={orderPagination?.totalPages || 1}
-        onPageChange={setPage}
-        handleNext={handleNext(orderPagination?.totalPages)}
-        handlePrev={handlePrev}
-      />
-    </FarmerPageWrapper>
-  );
+  const memoizedHandleNext = useCallback(() => {
+    handleNext(orderPagination?.totalPages);
+  }, [handleNext, orderPagination?.totalPages]);
+
+  const memoizedHandlePrev = useCallback(() => {
+    handlePrev();
+  }, [handlePrev]);
+
+  const renderOrders = useMemo(() => {
+    return orders.map((order: IOrder) => (
+      <OrderDetails order={order} key={order.id} />
+    ));
+  }, [orders]);
+
+  const renderError = useMemo(() => {
+    return error ? <div>{error}</div> : null;
+  }, [error]);
+
+  const renderSpinner = useMemo(() => {
+    return (
+      <div>
+        <Spinner />
+      </div>
+    );
+  }, []);
+
+  const wrappedContent = useMemo(() => {
+    return (
+      <FarmerPageWrapper title="Order Management">
+        {isLoading ? (
+          renderSpinner
+        ) : (
+          <>
+            {renderError}
+            {orders.length ? (
+              <div className="flex gap-4 flex-wrap">{renderOrders}</div>
+            ) : null}
+          </>
+        )}
+        <Pagination
+          activePage={pagination.page}
+          totalPages={orderPagination?.totalPages || 1}
+          onPageChange={setPage}
+          handleNext={memoizedHandleNext}
+          handlePrev={memoizedHandlePrev}
+        />
+      </FarmerPageWrapper>
+    );
+  }, [
+    isLoading,
+    renderSpinner,
+    renderError,
+    orders.length,
+    renderOrders,
+    pagination.page,
+    orderPagination?.totalPages,
+    setPage,
+    memoizedHandleNext,
+    memoizedHandlePrev,
+  ]);
+
+  return wrappedContent;
 };
 
-export default FarmersDashboard;
+export default memo(FarmersDashboard);

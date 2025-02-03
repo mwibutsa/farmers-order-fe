@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC, useMemo, useCallback } from "react";
 import React from "react";
 
 type PaginationProps = {
@@ -12,10 +12,20 @@ type PaginationProps = {
 const Pagination: FC<PaginationProps> = ({
   activePage,
   onPageChange,
-  handleNext,
-  handlePrev,
   totalPages,
 }) => {
+  const handleNext = useCallback(() => {
+    if (activePage < totalPages) {
+      onPageChange(activePage + 1);
+    }
+  }, [activePage, totalPages, onPageChange]);
+
+  const handlePrev = useCallback(() => {
+    if (activePage > 1) {
+      onPageChange(activePage - 1);
+    }
+  }, [activePage, onPageChange]);
+
   const renderPages = useMemo(() => {
     return [...Array(totalPages)]
       .map((_, i) => i + 1)
@@ -34,8 +44,9 @@ const Pagination: FC<PaginationProps> = ({
         );
       });
   }, [totalPages, activePage, onPageChange]);
+
   return (
-    <nav aria-label="Page  navigation example" className="my-6">
+    <nav aria-label="Page navigation example" className="my-6">
       <ul className="inline-flex -space-x-px text-sm">
         <li onClick={handlePrev} className="cursor-pointer">
           <span className="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
