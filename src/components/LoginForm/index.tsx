@@ -100,15 +100,17 @@ const LoginForm: FC = () => {
         >
           Login
         </Button>
-        <span className="text-sm text-slate-700">
-          Not account yet?{" "}
-          <button
-            onClick={handleSignUpClick}
-            className="text-green-700 cursor-pointer hover:border-b hover:border-green-700 hover:font-semibold w-16 h-6 text-left"
-          >
-            Sign Up
-          </button>
-        </span>
+        {!isAdmin && (
+          <span className="text-sm text-slate-700">
+            Not account yet?{" "}
+            <button
+              onClick={handleSignUpClick}
+              className="text-green-700 cursor-pointer hover:border-b hover:border-green-700 hover:font-semibold w-16 h-6 text-left"
+            >
+              Sign Up
+            </button>
+          </span>
+        )}
       </div>
     </form>
   );

@@ -50,7 +50,11 @@ const SideNav: FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
         <div className="flex-1"></div>
         <button
           onClick={logoutHandler}
-          className="rounded-sm hover:bg-green-700 hover:text-white px-4 py-1 border-2 border-green-700 text-green-700 font-bold"
+          className={`rounded-sm hover:bg-green-700 hover:text-white px-4 py-1 border-2 border-green-700 ${
+            isAdmin
+              ? "text-white border-white hover:border-green-700"
+              : "text-green-700"
+          } font-bold`}
         >
           Logout
         </button>
