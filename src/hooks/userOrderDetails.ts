@@ -28,8 +28,8 @@ const useOrderDetails = ({
   );
 
   return {
-    lands: response?.data?.data ?? [],
-    pagination: response?.data?.pagination,
+    lands: response?.data ?? [],
+    pagination: response?.pagination,
     isLoading,
     error,
     mutate,
