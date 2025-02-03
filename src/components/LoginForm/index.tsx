@@ -11,9 +11,11 @@ import {
 } from "react";
 import Input from "../Input";
 import Button from "../Button";
-import { ILoginPayload, ILoginResponse, loginHandler } from "@/lib/farmers";
+import { loginHandler } from "@/lib/farmers";
 import { AccountContext, AuthTypes } from "@/context/AccountProvider";
 import { useApiCall } from "@/hooks/useApiCall";
+import { ILoginResponse } from "@/interfaces/responses";
+import { ILoginPayload } from "@/interfaces/payload";
 
 const LoginForm: FC = () => {
   const { execute, isLoading, data } = useApiCall<

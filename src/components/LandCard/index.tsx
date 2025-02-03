@@ -1,6 +1,6 @@
 import { FC } from "react";
-import { ILand } from "@/hooks/userLand";
 import OrdersForm from "../OrdersForm";
+import { ILand } from "@/interfaces/responses";
 
 const LandCard: FC<{ land: ILand }> = ({ land }) => {
   return (

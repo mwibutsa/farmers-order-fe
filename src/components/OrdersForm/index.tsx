@@ -33,7 +33,6 @@ const OrdersForm: FC<OrderFormProps> = ({ selectedLand }) => {
 
   useEffect(() => {
     if (payload.seedId) {
-      console.log("seedId", payload.seedId);
       const seed = seeds.find((seed) => seed.id === payload.seedId);
       if (seed) {
         setSelectedSeed(seed);

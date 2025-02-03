@@ -11,8 +11,10 @@ import {
 } from "react";
 import Input from "../Input";
 import Button from "../Button";
-import { ISignUpPayload, signUpHandler } from "@/lib/farmers";
+import { signUpHandler } from "@/lib/farmers";
 import { AccountContext, AuthTypes } from "@/context/AccountProvider";
+import { ISignUpPayload } from "@/interfaces/payload";
+import { logger } from "@/utils/logger";
 
 const SignUpForm: FC = () => {
   const [payload, setPayload] = useState<ISignUpPayload>({
@@ -45,12 +47,11 @@ const SignUpForm: FC = () => {
 
       try {
         const result = await signUpHandler(payload);
-        console.log("result", result);
         if (result) {
           switchAuth(AuthTypes.LOGIN);
         }
       } catch (error) {
-        console.log(error);
+        logger(error);
       }
     },
     [disableSubmit, payload, switchAuth]

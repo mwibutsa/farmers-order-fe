@@ -2,10 +2,7 @@ import axios from "axios";
 import { getLocalStorageItem } from "@/lib/localStorage";
 import { LOGIN_KEY } from "@/context/AccountProvider";
 
-console.log(
-  "process.env.NEXT_PUBLIC_API_BASE",
-  process.env.NEXT_PUBLIC_API_BASE
-);
+
 
 const backendApi = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE,
