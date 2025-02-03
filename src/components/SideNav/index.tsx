@@ -30,15 +30,19 @@ const SideNav: FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   const pathPrefix = isAdmin ? "admin" : "farmers";
 
   return (
-    <nav className="pb-8  items-center h-[100svh]  flex flex-col min-w-36  bg-green-100">
+    <nav
+      className={`pb-8  items-center h-[100svh]  flex flex-col min-w-36  ${
+        isAdmin ? "bg-blue-900 text-white" : "bg-green-100"
+      }`}
+    >
       {memoizedImage}
       <ul className="flex flex-col gap-4 mt-12">
         {!isAdmin && (
-          <li>
+          <li className="border-b pb-4">
             <Link href={`/${pathPrefix}/land`}>Land</Link>
           </li>
         )}
-        <li>
+        <li className="border-b pb-4">
           <Link href={`/${pathPrefix}/orders`}>Orders</Link>
         </li>
       </ul>

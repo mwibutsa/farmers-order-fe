@@ -43,3 +43,8 @@ body {
     @include overlay-background(rgba(53, 151, 37,0.5), rgba(53, 151, 37,0.5), "/images/home-bg.jpg",to bottom );
   }
 }
+
+.admin-title { 
+  @apply text-blue-700;
+  
+}

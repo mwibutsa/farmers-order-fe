@@ -46,7 +46,7 @@ const FarmersDashboard: FC = () => {
 
   const wrappedContent = useMemo(() => {
     return (
-      <FarmerPageWrapper title="Order Management">
+      <FarmerPageWrapper title="Requested Orders" isAdmin>
         {isLoading ? (
           renderSpinner
         ) : (
