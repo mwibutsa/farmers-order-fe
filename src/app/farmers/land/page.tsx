@@ -6,8 +6,8 @@ import LandForm from "@/components/LandForm";
 import Pagination from "@/components/Pagination";
 import Spinner from "@/components/Spinner";
 import useLand from "@/hooks/userLand";
-
-import { FC, useState } from "react";
+import React from "react";
+import { FC, useCallback, useState } from "react";
 
 const LandPage: FC = () => {
   const [pages, setPages] = useState<{ page: number; limit: number }>({
@@ -17,20 +17,27 @@ const LandPage: FC = () => {
 
   const { isLoading, lands, pagination } = useLand(pages);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setPages((prev) => ({
       ...prev,
       page:
         (pagination?.totalPages || 1) > prev.page ? prev.page + 1 : prev.page,
     }));
-  };
+  }, [pagination?.totalPages]);
 
-  const handlePrev = () => {
+  const handlePrev = useCallback(() => {
     setPages((prev) => ({
       ...prev,
       page: prev.page > 1 ? prev.page - 1 : prev.page,
     }));
-  };
+  }, []);
+
+  const pageChangeHandler = useCallback((page: number) => {
+    setPages((prev) => ({
+      ...prev,
+      page,
+    }));
+  }, []);
 
   return (
     <FarmerPageWrapper title="Land Management">
@@ -63,12 +70,7 @@ const LandPage: FC = () => {
         <Pagination
           activePage={pages.page}
           totalPages={pagination?.totalPages || 1}
-          onPageChange={(page: number) => {
-            setPages((prev) => ({
-              ...prev,
-              page,
-            }));
-          }}
+          onPageChange={pageChangeHandler}
           handleNext={handleNext}
           handlePrev={handlePrev}
         />
@@ -77,4 +79,4 @@ const LandPage: FC = () => {
   );
 };
 
-export default LandPage;
+export default React.memo(LandPage);

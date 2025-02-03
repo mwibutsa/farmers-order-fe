@@ -12,6 +12,7 @@ import SelectInput from "../SelectInput";
 import useSeed, { ISeed } from "@/hooks/useSeeds";
 import { useApiCall } from "@/hooks/useApiCall";
 import { IMakeOrderPayload, IOrderDetails, makeOrder } from "@/lib/farmers";
+import React from "react";
 
 type OrderFormProps = {
   selectedLand?: number;
@@ -58,12 +59,14 @@ const OrdersForm: FC<OrderFormProps> = ({ selectedLand }) => {
       : [];
   }, [lands, selectedLand]);
 
-  const seedOptions = seeds?.length
-    ? seeds.map((seed) => ({
-        id: seed.id,
-        name: seed.name,
-      }))
-    : [];
+  const seedOptions = useMemo(() => {
+    return seeds?.length
+      ? seeds.map((seed) => ({
+          id: seed.id,
+          name: seed.name,
+        }))
+      : [];
+  }, [seeds]);
 
   const fertilizerOptions = useMemo(() => {
     const fertilizers = selectedSeed?.fertilizers || [];
@@ -149,4 +152,4 @@ const OrdersForm: FC<OrderFormProps> = ({ selectedLand }) => {
     </Modal>
   );
 };
-export default OrdersForm;
+export default React.memo(OrdersForm);

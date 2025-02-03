@@ -1,12 +1,11 @@
 "use client";
 
-import { ChangeEvent, FC, useCallback, useMemo, useState } from "react";
+import { ChangeEvent, FC, useCallback, useMemo, useState, memo } from "react";
 import Input from "../Input";
 import Modal from "../Modal";
 import { addLandInfoHandler } from "@/lib/farmers";
 import useLand, { ILand } from "@/hooks/userLand";
 import { useApiCall } from "@/hooks/useApiCall";
-
 interface LandPayload {
   upi: string;
   location?: string;
@@ -23,14 +22,15 @@ const LandForm: FC = () => {
     landSize: 0,
   });
 
-  const onChange = ({
-    target: { name, value },
-  }: ChangeEvent<HTMLInputElement>) => {
-    setPayload((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  const onChange = useCallback(
+    ({ target: { name, value } }: ChangeEvent<HTMLInputElement>) => {
+      setPayload((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    },
+    []
+  );
 
   const disableSubmit = useMemo(() => {
     return +payload.landSize <= 0 || payload.upi.trim() === "";
@@ -101,4 +101,4 @@ const LandForm: FC = () => {
   );
 };
 
-export default LandForm;
+export default memo(LandForm);

@@ -1,4 +1,5 @@
 import { ChangeEventHandler, FC } from "react";
+import React from "react";
 
 type InputProps = {
   label: string;
@@ -36,4 +37,4 @@ const Input: FC<InputProps> = ({
   );
 };
 
-export default Input;
+export default React.memo(Input);

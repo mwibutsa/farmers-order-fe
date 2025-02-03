@@ -8,6 +8,7 @@ import {
   SetStateAction,
   useCallback,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -86,19 +87,27 @@ const AccountProvider: FC<ContextProps> = ({ children }) => {
     }
   }, [pathname, router]);
 
+  const value = useMemo(
+    () => ({
+      isLoggedIn,
+      switchAuth,
+      setIsLoggedIn,
+      clientLogin,
+      authType,
+      logoutHandler,
+    }),
+    [
+      isLoggedIn,
+      switchAuth,
+      setIsLoggedIn,
+      clientLogin,
+      authType,
+      logoutHandler,
+    ]
+  );
+
   return (
-    <AccountContext.Provider
-      value={{
-        isLoggedIn,
-        switchAuth,
-        setIsLoggedIn,
-        clientLogin,
-        authType,
-        logoutHandler,
-      }}
-    >
-      {children}
-    </AccountContext.Provider>
+    <AccountContext.Provider value={value}>{children}</AccountContext.Provider>
   );
 };
 

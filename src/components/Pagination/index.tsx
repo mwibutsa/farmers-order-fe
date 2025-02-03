@@ -1,4 +1,5 @@
 import { FC } from "react";
+import React from "react";
 
 type PaginationProps = {
   onPageChange: (activePage: number) => void;
@@ -50,4 +51,4 @@ const Pagination: FC<PaginationProps> = ({
   );
 };
 
-export default Pagination;
+export default React.memo(Pagination);
