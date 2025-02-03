@@ -16,7 +16,7 @@ const OrdersForm: FC<OrderFormProps> = ({ selectedLand }) => {
   const { seeds, isLoading: loadingSeeds } = useSeed();
 
   const [payload, setPayload] = useState<IMakeOrderPayload>({
-    landId: selectedLand || lands[0].id,
+    landId: selectedLand ?? lands[0].id,
     seedId: seeds[0]?.id,
     fertilizerId: fertilizers[0]?.id,
   });
@@ -32,32 +32,28 @@ const OrdersForm: FC<OrderFormProps> = ({ selectedLand }) => {
   );
 
   const landOptions = useMemo(() => {
-    if (lands.length) {
-      return lands.map((land) => ({
-        id: land.id,
-        name: `${land.upi}: ${land.location ?? ""}`,
-        selected: land.id === selectedLand,
-      }));
-    }
-    return [];
+    return lands?.length
+      ? lands.map((land) => ({
+          id: land.id,
+          name: `${land.upi}: ${land.location ?? ""}`,
+          selected: land.id === selectedLand,
+        }))
+      : [];
   }, [lands, selectedLand]);
 
-  const seedOptions = useMemo(() => {
-    if (seeds.length) {
-      return seeds.map((seed) => ({
+  const seedOptions = seeds?.length
+    ? seeds.map((seed) => ({
         id: seed.id,
         name: seed.name,
-      }));
-    }
-    return [];
-  }, [seeds]);
+      }))
+    : [];
 
-  const fertilizerOptions = useMemo(() => {
-    return fertilizers.map((fertilizer) => ({
-      id: fertilizer.id,
-      name: fertilizer.name,
-    }));
-  }, [fertilizers]);
+  const fertilizerOptions = fertilizers?.length
+    ? fertilizers.map((fertilizer) => ({
+        id: fertilizer.id,
+        name: fertilizer.name,
+      }))
+    : [];
 
   const { execute, isLoading } = useApiCall<IOrderDetails, IMakeOrderPayload>();
 
@@ -94,6 +90,7 @@ const OrdersForm: FC<OrderFormProps> = ({ selectedLand }) => {
             label="Land"
             name="landId"
             value={payload.landId}
+            disabled
           />
         )}
         {/* Seeds */}
