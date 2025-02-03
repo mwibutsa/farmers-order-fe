@@ -59,7 +59,7 @@ const FarmersDashboard: FC = () => {
           </>
         )}
         {!orders?.length ? (
-          <div className="text-center pt-6">
+          <div className="text-center pt-6 text-slate-500">
             <p>Grab your cup of coffee and lean back for a moment</p>
             <p>Farmers have no requests for now.</p>
           </div>
