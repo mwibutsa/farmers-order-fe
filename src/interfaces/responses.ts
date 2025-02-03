@@ -2,6 +2,7 @@ export interface ILoginResponse {
   data: {
     accessToken: string;
     expiresIn: number;
+    isAdmin?: boolean;
   };
   status: number;
 }

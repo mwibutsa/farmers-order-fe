@@ -3,8 +3,9 @@ import Link from "next/link";
 import { FC, useContext, useMemo } from "react";
 import Image from "next/image";
 import { AccountContext } from "@/context/AccountProvider";
+import { usePathname } from "next/navigation";
 
-const SideNav: FC = () => {
+const SideNav: FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   const { logoutHandler } = useContext(AccountContext);
 
   const memoizedImage = useMemo(
@@ -20,18 +21,25 @@ const SideNav: FC = () => {
     []
   );
 
+  const pathname = usePathname();
+
+  if (pathname.includes("admin/login")) {
+    return null;
+  }
+
+  const pathPrefix = isAdmin ? "admin" : "farmers";
+
   return (
     <nav className="pb-8  items-center h-[100svh]  flex flex-col min-w-36  bg-green-100">
       {memoizedImage}
       <ul className="flex flex-col gap-4 mt-12">
+        {!isAdmin && (
+          <li>
+            <Link href={`/${pathPrefix}/land`}>Land</Link>
+          </li>
+        )}
         <li>
-          <Link href="/farmers/land">Land</Link>
-        </li>
-        <li>
-          <Link href="/farmers/orders">Orders</Link>
-        </li>
-        <li>
-          <Link href="/farmers/account">Account</Link>
+          <Link href={`/${pathPrefix}/orders`}>Orders</Link>
         </li>
       </ul>
       <div className="flex flex-1 flex-col">

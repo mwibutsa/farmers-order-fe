@@ -45,6 +45,7 @@ const Pagination: FC<PaginationProps> = ({
       });
   }, [totalPages, activePage, onPageChange]);
 
+  if (totalPages < 2) return null;
   return (
     <nav aria-label="Page navigation example" className="my-6">
       <ul className="inline-flex -space-x-px text-sm">

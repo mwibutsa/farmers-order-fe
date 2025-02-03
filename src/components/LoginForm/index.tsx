@@ -4,6 +4,7 @@ import {
   ChangeEvent,
   FC,
   FormEvent,
+  memo,
   useCallback,
   useContext,
   useMemo,
@@ -16,6 +17,9 @@ import { AccountContext, AuthTypes } from "@/context/AccountProvider";
 import { useApiCall } from "@/hooks/useApiCall";
 import { ILoginResponse } from "@/interfaces/responses";
 import { ILoginPayload } from "@/interfaces/payload";
+import { useLoginFunctions } from "@/hooks/useLogin";
+
+import { usePathname } from "next/navigation";
 
 const LoginForm: FC = () => {
   const { execute, isLoading, data } = useApiCall<
@@ -27,7 +31,8 @@ const LoginForm: FC = () => {
     password: "",
   });
 
-  const { clientLogin, switchAuth } = useContext(AccountContext);
+  const { switchAuth } = useContext(AccountContext);
+  const { clientLogin, adminLogin } = useLoginFunctions();
 
   const valueChangeHandler = useCallback(
     ({ target: { value, name } }: ChangeEvent<HTMLInputElement>) => {
@@ -43,18 +48,28 @@ const LoginForm: FC = () => {
     return payload.password.trim() === "" || payload.phoneNumber.trim() === "";
   }, [payload.password, payload.phoneNumber]);
 
+  const pathname = usePathname();
+
+  const isAdmin = useMemo(() => {
+    return pathname.includes("admin");
+  }, [pathname]);
+
   const submitHandler = useCallback(
     async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
       if (disableSubmit) return;
-      const { success } = await execute(() => loginHandler(payload));
+      const { success } = await execute(() => loginHandler(payload, isAdmin));
 
-      if (success && data) {
+      if (success && data && !data?.data.isAdmin) {
         clientLogin(data.data);
       }
+
+      if (success && data && data.data.isAdmin) {
+        adminLogin(data.data);
+      }
     },
-    [disableSubmit, payload, clientLogin, execute, data]
+    [disableSubmit, payload, clientLogin, execute, data, adminLogin, isAdmin]
   );
 
   const handleSignUpClick = useCallback(() => {
@@ -62,11 +77,11 @@ const LoginForm: FC = () => {
   }, [switchAuth]);
 
   return (
-    <form method="POST" onSubmit={submitHandler}>
+    <form method="POST" className="w-full" onSubmit={submitHandler}>
       <Input
         value={payload.phoneNumber}
-        placeholder="Phone number"
-        label="Phone number"
+        placeholder={isAdmin ? "Email" : "Phone number"}
+        label={isAdmin ? "Email" : "Phone number"}
         onChange={valueChangeHandler}
         name="phoneNumber"
       />
@@ -99,4 +114,4 @@ const LoginForm: FC = () => {
   );
 };
 
-export default LoginForm;
+export default memo(LoginForm);

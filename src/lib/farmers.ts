@@ -8,10 +8,17 @@ import { ILand, ILoginResponse, IOrder } from "@/interfaces/responses";
 import backendApi from "@/utils/backendApi";
 import { logger } from "@/utils/logger";
 
+
 export const loginHandler = async (
-  payload: ILoginPayload
+  payload: ILoginPayload,
+  isAdmin?: boolean
 ): Promise<ILoginResponse> => {
-  const { data } = await backendApi.post("/farmers/login", payload);
+  const { data } = await backendApi.post(
+    isAdmin ? "/admin/login" : "/farmers/login",
+    isAdmin
+      ? { email: payload.phoneNumber, password: payload.password }
+      : payload
+  );
   return data;
 };
 

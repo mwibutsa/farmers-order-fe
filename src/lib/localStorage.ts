@@ -16,3 +16,11 @@ export const isAuthenticated = () => {
   }
   return false;
 };
+
+export const isAdmin = () => {
+  if (isAuthenticated()) {
+    const loginInfo = getLocalStorageItem("loginInfo");
+    return loginInfo.isAdmin;
+  }
+  return false;
+};
