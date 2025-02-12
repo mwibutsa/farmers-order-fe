@@ -18,8 +18,9 @@ import { makeOrder } from "@/lib/farmers";
 
 type OrderFormProps = {
   selectedLand?: number;
+  mutateOrders?: () => void;
 };
-const OrdersForm: FC<OrderFormProps> = ({ selectedLand }) => {
+const OrdersForm: FC<OrderFormProps> = ({ selectedLand, mutateOrders }) => {
   const { lands, isLoading: loadingLands } = useLand();
   const { seeds, isLoading: loadingSeeds } = useSeed();
 
@@ -133,9 +134,10 @@ const OrdersForm: FC<OrderFormProps> = ({ selectedLand }) => {
       const { success } = await execute(() => makeOrder(payload));
       if (success) {
         afterSubmitCb?.();
+        mutateOrders?.();
       }
     },
-    [payload, disableSubmit, execute]
+    [payload, disableSubmit, execute, mutateOrders]
   );
 
   return (

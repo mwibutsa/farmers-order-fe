@@ -8,10 +8,11 @@ const STATUS_CLASS = {
   REJECTED: "text-red-500 border-red-500 bg-red-100",
   APPROVED: "text-green-500 border-green-500 bg-green-100",
 };
-const OrderDetails: FC<{ order: IOrder; isAdmin?: boolean }> = ({
-  order,
-  isAdmin,
-}) => {
+const OrderDetails: FC<{
+  order: IOrder;
+  isAdmin?: boolean;
+  mutate?: () => void;
+}> = ({ order, isAdmin, mutate }) => {
   const orderSummary = useMemo(() => {
     const seedsTotal = order.orderDetails.reduce(
       (acc, detail) => (detail.seed ? acc + detail.quantity : acc),
@@ -72,8 +73,12 @@ const OrderDetails: FC<{ order: IOrder; isAdmin?: boolean }> = ({
       {isAdmin && (
         <>
           <div className="flex justify-between mt-4">
-            <ApproveOrder orderId={order.id}>{orderSummary}</ApproveOrder>
-            <RejectOrder orderId={order.id}>{orderSummary}</RejectOrder>
+            <ApproveOrder afterAction={mutate} orderId={order.id}>
+              {orderSummary}
+            </ApproveOrder>
+            <RejectOrder afterAction={mutate} orderId={order.id}>
+              {orderSummary}
+            </RejectOrder>
           </div>
         </>
       )}

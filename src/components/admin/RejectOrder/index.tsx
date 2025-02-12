@@ -6,10 +6,11 @@ import { IOrder } from "@/interfaces/responses";
 import { updateOrderStatusHandler } from "@/lib/admin";
 import { FC, memo, ReactNode, useCallback } from "react";
 
-const RejectOrder: FC<{ children?: ReactNode; orderId: number }> = ({
-  children,
-  orderId,
-}) => {
+const RejectOrder: FC<{
+  children?: ReactNode;
+  orderId: number;
+  afterAction?: () => void;
+}> = ({ children, orderId, afterAction }) => {
   const { execute, isLoading } = useApiCall<
     { data: IOrder; status: number },
     IOrderStatusPayload
@@ -23,9 +24,10 @@ const RejectOrder: FC<{ children?: ReactNode; orderId: number }> = ({
 
       if (success) {
         afterSubmit?.();
+        afterAction?.();
       }
     },
-    [orderId, execute]
+    [orderId, execute, afterAction]
   );
 
   return (
