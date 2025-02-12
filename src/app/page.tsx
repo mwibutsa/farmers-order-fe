@@ -18,7 +18,7 @@ export default function Home() {
   if (isLoggedIn) return null;
   return (
     <div className="flex flex-col h-[100svh]">
-      <main className="flex-1 flex-col md:flex">
+      <main className="flex-1 flex-col flex lg:flex-row">
         {/**Welcome Message */}
         <div className="p-8 md:p-32 flex-[1/2] xl:flex-1 bg-img__welcome min-h-[40vh]">
           <div className="text-white bg-green-700 inline-block p-8 rounded-sm">
