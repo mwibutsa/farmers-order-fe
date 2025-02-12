@@ -11,11 +11,13 @@
   "dependencies": {
     "@million/lint": "^1.0.14",
     "axios": "^1.7.9",
+    "cookies-next": "^5.1.0",
     "next": "15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "sass": "^1.83.4",
-    "swr": "^2.3.0"
+    "swr": "^2.3.0",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

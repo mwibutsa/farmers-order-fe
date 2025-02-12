@@ -3,10 +3,10 @@
 import {
   ChangeEvent,
   FC,
-  FormEvent,
   memo,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
 } from "react";
@@ -14,15 +14,14 @@ import Input from "../Input";
 import Button from "../Button";
 import { loginHandler } from "@/lib/farmers";
 import { AccountContext, AuthTypes } from "@/context/AccountProvider";
-import { useApiCall } from "@/hooks/useApiCall";
+import { CustomError, useApiCall } from "@/hooks/useApiCall";
 import { ILoginResponse } from "@/interfaces/responses";
 import { ILoginPayload } from "@/interfaces/payload";
 import { useLoginFunctions } from "@/hooks/useLogin";
-
 import { usePathname } from "next/navigation";
 
 const LoginForm: FC = () => {
-  const { execute, isLoading, data } = useApiCall<
+  const { execute, isLoading, data, error } = useApiCall<
     ILoginResponse,
     ILoginPayload
   >();
@@ -54,30 +53,27 @@ const LoginForm: FC = () => {
     return pathname.includes("admin");
   }, [pathname]);
 
-  const submitHandler = useCallback(
-    async (e: FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
+  useEffect(() => {
+    if (data?.data) {
+      const { data: loginData } = data;
+      const callback = loginData?.isAdmin ? adminLogin : clientLogin;
+      callback(loginData);
+    }
+  }, [data, adminLogin, clientLogin]);
 
-      if (disableSubmit) return;
-      const { success } = await execute(() => loginHandler(payload, isAdmin));
-
-      if (success && data && !data?.data.isAdmin) {
-        clientLogin(data.data);
-      }
-
-      if (success && data && data.data.isAdmin) {
-        adminLogin(data.data);
-      }
-    },
-    [disableSubmit, payload, clientLogin, execute, data, adminLogin, isAdmin]
-  );
+  const accountLoginHandler = useCallback(async () => {
+    if (disableSubmit) return;
+    await execute(() => loginHandler(payload, isAdmin));
+  }, [disableSubmit, payload, , execute, isAdmin]);
 
   const handleSignUpClick = useCallback(() => {
     switchAuth(AuthTypes.SIGN_UP);
   }, [switchAuth]);
 
+  const customError = error as CustomError;
+
   return (
-    <form method="POST" className="w-full" onSubmit={submitHandler}>
+    <form method="POST" className="w-full" onSubmit={(e) => e.preventDefault()}>
       <Input
         value={payload.phoneNumber}
         placeholder={isAdmin ? "Email" : "Phone number"}
@@ -93,13 +89,29 @@ const LoginForm: FC = () => {
         onChange={valueChangeHandler}
         name="password"
       />
+
+      <div className="h-12">
+        {customError?.message ? (
+          <div className="bg my-2 rounded-md  p-2 bg-red-300">
+            {error?.message}
+          </div>
+        ) : null}
+
+        {customError?.error && !customError?.message ? (
+          <div className="bg my-2 rounded-md  p-2 bg-red-300">
+            {customError.error["phoneNumber"]}
+          </div>
+        ) : null}
+      </div>
       <div className="flex items-center gap-2">
         <Button
           type="submit"
           className={`${isLoading ? "pointer-events-none bg-green-200" : ""}`}
+          onClick={accountLoginHandler}
         >
           Login
         </Button>
+
         {!isAdmin && (
           <span className="text-sm text-slate-700">
             Not account yet?{" "}
