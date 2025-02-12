@@ -4,7 +4,6 @@ import { ChangeEvent, FC, useCallback, useMemo, useState, memo } from "react";
 import Input from "../Input";
 import Modal from "../Modal";
 import { addLandInfoHandler } from "@/lib/farmers";
-import useLand from "@/hooks/userLand";
 import { useApiCall } from "@/hooks/useApiCall";
 import { ILand } from "@/interfaces/responses";
 interface LandPayload {
@@ -13,8 +12,7 @@ interface LandPayload {
   landSize: number;
 }
 
-const LandForm: FC = () => {
-  const { mutate } = useLand();
+const LandForm: FC<{ mutate?: () => void }> = ({ mutate }) => {
   const { execute, isLoading, error } = useApiCall<ILand | undefined>();
 
   const [payload, setPayload] = useState<LandPayload>({
@@ -54,7 +52,7 @@ const LandForm: FC = () => {
           upi: "",
           location: "",
         });
-        mutate();
+        mutate?.();
         afterSubmit?.();
       }
     },

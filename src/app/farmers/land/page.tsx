@@ -17,7 +17,12 @@ const LandPage: FC = () => {
     handlePrev: originalHandlePrev,
   } = usePagination(1, 5);
 
-  const { isLoading, lands, pagination: landPagination } = useLand(pagination);
+  const {
+    isLoading,
+    lands,
+    pagination: landPagination,
+    mutate,
+  } = useLand(pagination);
 
   const handleNext = useCallback(() => {
     if (landPagination?.totalPages) {
@@ -47,7 +52,7 @@ const LandPage: FC = () => {
     <FarmerPageWrapper title="Land Management">
       <div className="inline-flex gap-12 items-center pt-6">
         {header}
-        <LandForm />
+        <LandForm mutate={mutate} />
       </div>
       {!isLoading && !lands.length && (
         <div>

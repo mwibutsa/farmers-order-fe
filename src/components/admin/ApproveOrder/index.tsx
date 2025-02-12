@@ -5,11 +5,12 @@ import { IOrderStatusPayload } from "@/interfaces/payload";
 import { IOrder } from "@/interfaces/responses";
 import { updateOrderStatusHandler } from "@/lib/admin";
 import { FC, memo, ReactNode, useCallback } from "react";
-
-const ApproveOrder: FC<{ children?: ReactNode; orderId: number }> = ({
-  children,
-  orderId,
-}) => {
+import { toast } from "react-toastify";
+const ApproveOrder: FC<{
+  children?: ReactNode;
+  orderId: number;
+  afterAction?: () => void;
+}> = ({ children, orderId, afterAction }) => {
   const { execute, isLoading } = useApiCall<
     { data: IOrder; status: number },
     IOrderStatusPayload
@@ -22,10 +23,14 @@ const ApproveOrder: FC<{ children?: ReactNode; orderId: number }> = ({
       );
 
       if (success) {
+        afterAction?.();
         afterSubmit?.();
+        toast("Order has been approved!", {
+          type: "success",
+        });
       }
     },
-    [orderId, execute]
+    [orderId, execute, afterAction]
   );
 
   return (

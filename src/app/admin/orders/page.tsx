@@ -17,6 +17,7 @@ const FarmersDashboard: FC = () => {
     isLoading,
     error,
     pagination: orderPagination,
+    mutate,
   } = usePendingOrders(pagination);
 
   const memoizedHandleNext = useCallback(() => {
@@ -29,9 +30,9 @@ const FarmersDashboard: FC = () => {
 
   const renderOrders = useMemo(() => {
     return orders.map((order: IOrder) => (
-      <OrderDetails order={order} key={order.id} isAdmin />
+      <OrderDetails order={order} key={order.id} isAdmin mutate={mutate} />
     ));
-  }, [orders]);
+  }, [orders, mutate]);
 
   const renderError = useMemo(() => {
     return error ? <div>{error}</div> : null;

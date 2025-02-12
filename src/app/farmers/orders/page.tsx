@@ -16,6 +16,7 @@ const FarmersDashboard: FC = () => {
     isLoading,
     error,
     pagination: orderPagination,
+    mutate,
   } = useOrderDetails(pagination);
 
   const memoizedHandleNext = useCallback(() => {
@@ -28,7 +29,7 @@ const FarmersDashboard: FC = () => {
 
   const renderOrders = useMemo(() => {
     return orders.map((order: IOrder) => (
-      <OrderDetails order={order} key={order.id} />
+      <OrderDetails order={order} key={order.id} mutate={mutate} />
     ));
   }, [orders]);
 
