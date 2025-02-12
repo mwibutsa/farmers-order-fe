@@ -5,7 +5,7 @@ import { IOrderStatusPayload } from "@/interfaces/payload";
 import { IOrder } from "@/interfaces/responses";
 import { updateOrderStatusHandler } from "@/lib/admin";
 import { FC, memo, ReactNode, useCallback } from "react";
-
+import { toast } from "react-toastify";
 const ApproveOrder: FC<{
   children?: ReactNode;
   orderId: number;
@@ -25,6 +25,9 @@ const ApproveOrder: FC<{
       if (success) {
         afterAction?.();
         afterSubmit?.();
+        toast("Order has been approved!", {
+          type: "success",
+        });
       }
     },
     [orderId, execute, afterAction]

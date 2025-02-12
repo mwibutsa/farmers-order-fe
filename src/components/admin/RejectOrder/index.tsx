@@ -5,6 +5,7 @@ import { IOrderStatusPayload } from "@/interfaces/payload";
 import { IOrder } from "@/interfaces/responses";
 import { updateOrderStatusHandler } from "@/lib/admin";
 import { FC, memo, ReactNode, useCallback } from "react";
+import { toast } from "react-toastify";
 
 const RejectOrder: FC<{
   children?: ReactNode;
@@ -25,6 +26,9 @@ const RejectOrder: FC<{
       if (success) {
         afterSubmit?.();
         afterAction?.();
+        toast("Farmer's request has been rejected.", {
+          type: "warning",
+        });
       }
     },
     [orderId, execute, afterAction]
