@@ -30,36 +30,38 @@ const SideNav: FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
   const pathPrefix = isAdmin ? "admin" : "farmers";
 
   return (
-    <nav
-      className={`pb-8  left-0 top-0 fixed md:relative items-center h-[100svh]  flex flex-col sm:min-w-36  ${
-        isAdmin ? "bg-blue-900 text-white" : "bg-green-100"
-      }`}
-    >
-      {memoizedImage}
-      <ul className="flex flex-col gap-4 mt-12">
-        {!isAdmin && (
+    <div className="w-14 md:w-fit min-h-[100svh]">
+      <nav
+        className={`pb-8  left-0 top-0 fixed md:relative items-center h-[100svh]  flex flex-col sm:min-w-36  ${
+          isAdmin ? "bg-blue-900 text-white" : "bg-green-100"
+        }`}
+      >
+        {memoizedImage}
+        <ul className="flex flex-col gap-4 mt-12">
+          {!isAdmin && (
+            <li className="border-b pb-4">
+              <Link href={`/${pathPrefix}/land`}>Land</Link>
+            </li>
+          )}
           <li className="border-b pb-4">
-            <Link href={`/${pathPrefix}/land`}>Land</Link>
+            <Link href={`/${pathPrefix}/orders`}>Orders</Link>
           </li>
-        )}
-        <li className="border-b pb-4">
-          <Link href={`/${pathPrefix}/orders`}>Orders</Link>
-        </li>
-      </ul>
-      <div className="flex flex-1 flex-col">
-        <div className="flex-1"></div>
-        <button
-          onClick={logout}
-          className={`rounded-sm hover:bg-green-700 hover:text-white text-sm md:text-lg mx-1 px-1 sm:px-4 py-1 border-2 border-green-700 ${
-            isAdmin
-              ? "text-white border-white hover:border-green-700"
-              : "text-green-700"
-          } font-bold`}
-        >
-          Logout
-        </button>
-      </div>
-    </nav>
+        </ul>
+        <div className="flex flex-1 flex-col">
+          <div className="flex-1"></div>
+          <button
+            onClick={logout}
+            className={`rounded-sm hover:bg-green-700 hover:text-white text-sm md:text-lg mx-1 px-1 sm:px-4 py-1 border-2 border-green-700 ${
+              isAdmin
+                ? "text-white border-white hover:border-green-700"
+                : "text-green-700"
+            } font-bold`}
+          >
+            Logout
+          </button>
+        </div>
+      </nav>
+    </div>
   );
 };
 
