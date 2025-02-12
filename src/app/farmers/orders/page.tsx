@@ -31,7 +31,7 @@ const FarmersDashboard: FC = () => {
     return orders.map((order: IOrder) => (
       <OrderDetails order={order} key={order.id} mutate={mutate} />
     ));
-  }, [orders]);
+  }, [orders, mutate]);
 
   const renderError = useMemo(() => {
     return error ? <div>{error}</div> : null;
