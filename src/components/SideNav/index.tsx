@@ -15,7 +15,7 @@ const SideNav: FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
         alt="Logo"
         width={100}
         height={100}
-        className="object-contain w-24 h-24"
+        className="object-contain w-12 h-12 sm:w-24 sm:h-24"
       />
     ),
     []
@@ -31,7 +31,7 @@ const SideNav: FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
 
   return (
     <nav
-      className={`pb-8  items-center h-[100svh]  flex flex-col min-w-36  ${
+      className={`pb-8  left-0 top-0 fixed md:relative items-center h-[100svh]  flex flex-col sm:min-w-36  ${
         isAdmin ? "bg-blue-900 text-white" : "bg-green-100"
       }`}
     >
@@ -50,7 +50,7 @@ const SideNav: FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
         <div className="flex-1"></div>
         <button
           onClick={logout}
-          className={`rounded-sm hover:bg-green-700 hover:text-white px-4 py-1 border-2 border-green-700 ${
+          className={`rounded-sm hover:bg-green-700 hover:text-white text-sm md:text-lg mx-1 px-1 sm:px-4 py-1 border-2 border-green-700 ${
             isAdmin
               ? "text-white border-white hover:border-green-700"
               : "text-green-700"

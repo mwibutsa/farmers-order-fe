@@ -42,7 +42,9 @@ const LandPage: FC = () => {
   const header = useMemo(() => {
     if (lands.length || isLoading) {
       return (
-        <h1 className="text-xl font-bold text-gray-600">You own these lands</h1>
+        <h1 className="sm:text-xl font-bold text-gray-600">
+          You own these lands
+        </h1>
       );
     }
     return null;
@@ -50,7 +52,7 @@ const LandPage: FC = () => {
 
   return (
     <FarmerPageWrapper title="Land Management">
-      <div className="inline-flex gap-12 items-center pt-6">
+      <div className="inline-flex gap-2 sm:gap-12 items-center pt-6">
         {header}
         <LandForm mutate={mutate} />
       </div>
