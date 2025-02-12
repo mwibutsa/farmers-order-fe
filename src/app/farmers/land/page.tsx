@@ -16,6 +16,7 @@ const LandPage: FC = () => {
     handleNext: originalHandleNext,
     handlePrev: originalHandlePrev,
   } = usePagination(1, 5);
+
   const { isLoading, lands, pagination: landPagination } = useLand(pagination);
 
   const handleNext = useCallback(() => {

@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { LOGIN_KEY } from "@/context/AccountProvider";
+import { useAuth } from "./useAuth";
 
 interface LoginData {
   accessToken: string;
@@ -10,6 +11,7 @@ interface LoginData {
 
 const useLogin = (redirectPath: string) => {
   const router = useRouter();
+  const { login } = useAuth();
 
   return useCallback(
     (data: LoginData) => {
@@ -22,9 +24,10 @@ const useLogin = (redirectPath: string) => {
           ).getTime(),
         })
       );
+      login(data.accessToken, data.expiresIn, data.isAdmin);
       router.replace(redirectPath);
     },
-    [router, redirectPath]
+    [router, redirectPath, login]
   );
 };
 

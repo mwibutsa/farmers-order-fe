@@ -1,15 +1,25 @@
 import { AxiosError } from "axios";
 import { useState } from "react";
 
+export class CustomError extends Error {
+  constructor(message?: string, public error: { [x: string]: string } = {}) {
+    super(message);
+  }
+}
+
+type ResponseError = {
+  error: string | { [x: string]: string };
+};
+
 interface ApiCallState<TResponse> {
   data: TResponse | null;
-  error: Error | null;
+  error: CustomError | Error | null;
   isLoading: boolean;
 }
 
 type ApiCallResult<TResponse> =
   | { success: true; data: TResponse; result?: unknown }
-  | { success: false; error: Error };
+  | { success: false; error: Error | CustomError };
 
 export const useApiCall = <TResponse, TData = TResponse>() => {
   const [state, setState] = useState<ApiCallState<TResponse>>({
@@ -31,10 +41,14 @@ export const useApiCall = <TResponse, TData = TResponse>() => {
     } catch (err) {
       let error;
       const axiosErr = err as AxiosError;
+      const responseError = axiosErr.response?.data as ResponseError;
       if (axiosErr.response?.data) {
-        error = new Error(
-          (axiosErr.response.data as unknown as { error: string }).error
-        );
+        error =
+          typeof responseError.error === "string"
+            ? new CustomError(
+                (axiosErr.response?.data as ResponseError).error as string
+              )
+            : new CustomError("", responseError.error);
       } else {
         error = err instanceof Error ? err : new Error("An error occurred");
       }
@@ -53,7 +67,7 @@ export const useApiCall = <TResponse, TData = TResponse>() => {
 
 export type UseApiCallReturn<TResponse, TData = TResponse> = {
   isLoading: boolean;
-  error: Error | null;
+  error: CustomError | Error | null;
   data: TResponse | null;
   execute: (
     apiCall: () => Promise<TResponse>,

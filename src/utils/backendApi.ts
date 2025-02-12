@@ -28,8 +28,12 @@ backendApi.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem(LOGIN_KEY);
-      window.location.href = "/";
+      console.log("error", error);
+      console.log("error.request", error.request);
+      if (!error.request.responseURL.includes("login")) {
+        localStorage.removeItem(LOGIN_KEY);
+        window.location.href = "/";
+      }
     }
     return Promise.reject(error);
   }

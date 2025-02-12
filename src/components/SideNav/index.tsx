@@ -1,12 +1,12 @@
 "use client";
 import Link from "next/link";
-import { FC, useContext, useMemo } from "react";
+import { FC, useMemo } from "react";
 import Image from "next/image";
-import { AccountContext } from "@/context/AccountProvider";
 import { usePathname } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 const SideNav: FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
-  const { logoutHandler } = useContext(AccountContext);
+  const { logout } = useAuth();
 
   const memoizedImage = useMemo(
     () => (
@@ -49,7 +49,7 @@ const SideNav: FC<{ isAdmin?: boolean }> = ({ isAdmin }) => {
       <div className="flex flex-1 flex-col">
         <div className="flex-1"></div>
         <button
-          onClick={logoutHandler}
+          onClick={logout}
           className={`rounded-sm hover:bg-green-700 hover:text-white px-4 py-1 border-2 border-green-700 ${
             isAdmin
               ? "text-white border-white hover:border-green-700"

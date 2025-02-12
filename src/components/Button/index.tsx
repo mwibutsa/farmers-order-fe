@@ -4,6 +4,7 @@ type ButtonProps = {
   children: ReactNode;
   type?: "submit" | "reset" | "button";
   className?: string;
+  onClick?: () => void;
 };
 const Button: FC<ButtonProps> = ({ children, className, ...buttonProps }) => {
   return (

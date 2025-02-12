@@ -10,8 +10,7 @@ import {
   useMemo,
   useState,
 } from "react";
-import { useRouter } from "next/navigation";
-import useAuthRedirect from "@/hooks/useAuthRedirect";
+
 
 export enum AuthTypes {
   LOGIN = "LOGIN",
@@ -24,7 +23,6 @@ type AccountState = {
   isLoggedIn: boolean;
   setIsLoggedIn: Dispatch<SetStateAction<boolean>>;
   switchAuth: (auth: AuthTypes) => void;
-  logoutHandler: () => void;
   authType: AuthTypes;
 };
 
@@ -32,7 +30,6 @@ export const AccountContext = createContext<AccountState>({
   isLoggedIn: false,
   setIsLoggedIn: () => {},
   switchAuth: () => {},
-  logoutHandler: () => {},
   authType: AuthTypes.LOGIN,
 });
 
@@ -44,20 +41,9 @@ const AccountProvider: FC<ContextProps> = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [authType, setAuthType] = useState<AuthTypes>(AuthTypes.LOGIN);
 
-  const router = useRouter();
-
-  const logoutHandler = useCallback(() => {
-    localStorage.removeItem(LOGIN_KEY);
-    setIsLoggedIn(false);
-    router.replace("/");
-  }, [router]);
-
   const switchAuth = useCallback((auth: AuthTypes) => {
     setAuthType(auth);
   }, []);
-
-  // Handle redirects
-  useAuthRedirect();
 
   const value = useMemo(
     () => ({
@@ -65,18 +51,12 @@ const AccountProvider: FC<ContextProps> = ({ children }) => {
       switchAuth,
       setIsLoggedIn,
       authType,
-      logoutHandler,
     }),
-    [isLoggedIn, switchAuth, setIsLoggedIn, authType, logoutHandler]
+    [isLoggedIn, switchAuth, setIsLoggedIn, authType]
   );
 
-  return useMemo(
-    () => (
-      <AccountContext.Provider value={value}>
-        {children}
-      </AccountContext.Provider>
-    ),
-    [value, children]
+  return (
+    <AccountContext.Provider value={value}>{children}</AccountContext.Provider>
   );
 };
 

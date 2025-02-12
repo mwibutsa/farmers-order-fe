@@ -1,3 +1,5 @@
+import { LOGIN_KEY } from "@/context/AccountProvider";
+
 export const getLocalStorageItem = (key: string, defaultValue = null) => {
   if (typeof window === undefined) return;
 
@@ -9,7 +11,7 @@ export const getLocalStorageItem = (key: string, defaultValue = null) => {
 };
 
 export const isAuthenticated = () => {
-  const loginInfo = getLocalStorageItem("loginInfo");
+  const loginInfo = getLocalStorageItem(LOGIN_KEY);
 
   if (loginInfo) {
     return new Date().getTime() < loginInfo.expiresAt;
@@ -19,7 +21,7 @@ export const isAuthenticated = () => {
 
 export const isAdmin = () => {
   if (isAuthenticated()) {
-    const loginInfo = getLocalStorageItem("loginInfo");
+    const loginInfo = getLocalStorageItem(LOGIN_KEY);
     return loginInfo.isAdmin;
   }
   return false;
