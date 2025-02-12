@@ -73,7 +73,11 @@ const LoginForm: FC = () => {
   const customError = error as CustomError;
 
   return (
-    <form method="POST" className="w-full" onSubmit={(e) => e.preventDefault()}>
+    <form
+      method="POST"
+      className="w-full min-w-64"
+      onSubmit={(e) => e.preventDefault()}
+    >
       <Input
         value={payload.phoneNumber}
         placeholder={isAdmin ? "Email" : "Phone number"}
@@ -92,18 +96,18 @@ const LoginForm: FC = () => {
 
       <div className="h-12">
         {customError?.message ? (
-          <div className="bg my-2 rounded-md  p-2 bg-red-300">
+          <div className="bg my-2 rounded-md text-red-700  p-2 bg-red-200">
             {error?.message}
           </div>
         ) : null}
 
         {customError?.error && !customError?.message ? (
-          <div className="bg my-2 rounded-md  p-2 bg-red-300">
+          <div className="bg my-2 rounded-md  p-2 bg-red-200 text-red-700">
             {customError.error["phoneNumber"]}
           </div>
         ) : null}
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-2">
         <Button
           type="submit"
           className={`${isLoading ? "pointer-events-none bg-green-200" : ""}`}
@@ -114,7 +118,7 @@ const LoginForm: FC = () => {
 
         {!isAdmin && (
           <span className="text-sm text-slate-700">
-            Not account yet?{" "}
+            No account yet?{" "}
             <button
               onClick={handleSignUpClick}
               className="text-green-700 cursor-pointer hover:border-b hover:border-green-700 hover:font-semibold w-16 h-6 text-left"

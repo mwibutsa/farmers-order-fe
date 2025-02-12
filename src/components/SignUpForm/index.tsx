@@ -90,7 +90,7 @@ const SignUpForm: FC = () => {
         onChange={valueChangeHandler}
         name="password"
       />
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 flex-wrap">
         <Button type="submit">Sign Up</Button>
         <span className="text-sm text-slate-700">
           Already have an account ?{" "}
