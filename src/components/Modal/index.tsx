@@ -46,6 +46,7 @@ const Modal = ({
         tabIndex={-1}
         aria-hidden={!isOpen}
         onClick={handleClose}
+        role="dialog"
       >
         <div
           className="relative mx-auto top-1/4 p-4 w-full max-w-2xl max-h-full "
