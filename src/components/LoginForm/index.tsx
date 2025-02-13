@@ -110,7 +110,9 @@ const LoginForm: FC = () => {
       <div className="flex flex-wrap items-center gap-2">
         <Button
           type="submit"
-          className={`${isLoading ? "pointer-events-none bg-green-200" : ""}`}
+          className={`${
+            isLoading || disableSubmit ? "pointer-events-none bg-green-200" : ""
+          }`}
           onClick={accountLoginHandler}
         >
           Login
