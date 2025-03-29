@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@million/lint": "^1.0.14",
-    "axios": "^1.7.9",
+    "axios": "^1.8.3",
     "cookies-next": "^5.1.0",
     "next": "15.1.6",
     "react": "^19.0.0",
